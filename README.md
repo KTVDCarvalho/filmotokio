@@ -1,52 +1,164 @@
 # FILMOTOKIO
 
-FILMOTOKIO is a full-featured web application for managing movie databases, developed in Java 17 with Spring Boot 2.7.18, offering a modern and responsive interface for managing movies, artists, reviews, and users.
+[![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen?style=for-the-badge&logo=spring-boot)](https://spring.io/projects/spring-boot)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+[![Database](https://img.shields.io/badge/Database-H2-00ADD8?style=for-the-badge&logo=h2)](https://www.h2database.com/)
 
-## Overview
+**FILMOTOKIO** is a full-stack web application for movie database management, developed with Java 17 and Spring Boot 2.7.18. This platform demonstrates fundamental web development practices with a responsive interface for managing films, artists, reviews, and users.
 
-The system allows:
-- Complete registration and management of movies (title, year, duration, synopsis, poster)
-- Association of multiple artists (actors, directors, screenwriters, musicians) to each movie
-- Movie rating system with star-based reviews and enhanced visual effects
-- User management with authentication, profiles, and roles (USER, ADMIN)
-- Administrative panel for managing users, movies, and data migration
-- Advanced search functionality with intelligent filtering
-- Premium dark theme with glass morphism design
-- **H2 Database** with file-based persistence for development
-- **Poster management** with working image display system
-- **Java 17 compatibility** with proper Lombok configuration
+## Key Features
+
+### **Movie Management**
+- Film catalog with poster uploads and metadata
+- Basic search functionality by title
+- 5-star rating system for films
+- Review system with user comments
+- Film deletion (admin only)
+
+### **User Management**
+- User authentication and registration
+- User profiles with photo uploads
+- Role-based access (USER/ADMIN)
+- Admin panel for user management
+
+### **Artist Management**
+- Artist registration (Actors, Directors, Screenwriters, Musicians, Photographers)
+- Film association with multiple artists
+- Artist categorization by role
+
+### **Technical Features**
+- **H2 Database** with file-based persistence
+- Spring Security with BCrypt encryption
+- Responsive design with Bootstrap
+- Spring Batch for data migration
+- File upload handling for posters and profiles
+
+## Project Showcase
+
+### **Home Dashboard**
+![Home Page](uploads/HomePage.png)
+
+Main dashboard displaying all films in the database with average ratings and poster images.
+
+---
+
+### **Authentication System**
+
+#### **Login Interface**
+![Login Page](uploads/LoginPage.png)
+
+Login form with username and password authentication.
+
+#### **User Registration**
+![User Register Page](uploads/UserRegisterPage.png)
+
+Registration form for new users with basic information fields.
+
+---
+
+### **Navigation & User Experience**
+
+#### **Main Navigation**
+![Menu](uploads/Menu.png)
+
+Navigation bar with access to main features and user menu.
+
+#### **Navigation Dropdown**
+![NavBar DropDown Menu](uploads/NavBarDropDownMenu.png)
+
+User menu dropdown with profile and logout options.
+
+---
+
+### **Movie Management Features**
+
+#### **Film Details Page**
+![Film Page](uploads/FilmPage.png)
+
+Individual film page showing details, ratings, reviews, and cast information.
+
+#### **Basic Search**
+![Search Films](uploads/SearchFilms.png)
+
+Simple search interface to find films by title.
+
+#### **Search Results**
+![Search Results](uploads/SearchResults.png)
+
+Search results displaying matching films with posters and ratings.
+
+---
+
+### **User Profile System**
+
+#### **Profile Page**
+![Profile Stats](uploads/ProfileStats.png)
+
+User profile page with personal information and settings.
+
+#### **User Reviews**
+![User Reviews](uploads/UserReviews.png)
+
+Section displaying user's film reviews and ratings.
+
+---
+
+### **Administrative Features**
+
+#### **Admin User Management**
+![Admin Register New User](uploads/AdminRegisterNewUser.png)
+
+Admin interface for registering new users with role assignment.
+
+#### **Artist Registration**
+![Create New Artist](uploads/CreateNewArtist.png)
+
+Form for registering new artists with role selection.
+
+#### **Data Migration System**
+![Migration System](uploads/MigrationSystem.png)
+
+Spring Batch interface for exporting film data to CSV format.
+
+---
+
+### **UI/UX Details**
+
+#### **Footer Design**
+![Footer](uploads/Footer.png)
+
+Footer with navigation links and project information.
+
+#### **Delete Confirmation**
+![Delete Film Button](uploads/DeleteFilmButton.png)
+
+Film deletion interface available to administrators.
 
 ## Technologies Used
 
-### Backend
-- Java 17
-- Spring Boot 2.7.18
-- Spring Data JPA
-- Spring MVC
-- Spring Security
-- Spring Batch Processing
-- Spring Scheduling
-- Maven
-- **H2 Database** (File-based for development - Default)
-- **MySQL Database** (Production ready)
-- **PostgreSQL** (Alternative production option)
+### **Backend**
+- **Java 17** - Modern Java with enhanced features
+- **Spring Boot 2.7.18** - Enterprise application framework
+- **Spring Data JPA** - Database abstraction layer
+- **Spring Security** - Authentication and authorization
+- **Spring Batch** - Data processing and migration
+- **H2 Database** - File-based persistence (default)
+- **MySQL/PostgreSQL** - Production database options
+- **Maven** - Dependency management
 
-### Frontend
-- Semantic HTML5 with Thymeleaf
-- **Advanced CSS3** with design system and CSS variables
-- **Glass morphism effects** and modern animations
-- **Responsive design** with mobile-first approach
-- **Professional component-based CSS architecture
-- Bootstrap 5.3.2
-- Font Awesome 6.5.1
-- Vanilla JavaScript
+### **Frontend**
+- **Thymeleaf** - Server-side templating engine
+- **HTML5 & CSS3** - Modern web standards
+- **Bootstrap 5.3.2** - Responsive UI framework
+- **Font Awesome 6.5.1** - Icon library
+- **Vanilla JavaScript** - Interactive functionality
 
-### Design Features
-- Glass morphism effects with backdrop filters
-- Enhanced star rating animations (left-to-right sweep effects)
-- Responsive grid layouts for all screen sizes
-- Interactive hover states and smooth transitions
-- Premium dark theme with gradient backgrounds
+### **Design System**
+- **CSS Variables** - Consistent theming
+- **Responsive Grid** - Mobile-compatible layout
+- **Component Architecture** - Modular CSS structure
+- **Bootstrap Integration** - UI framework components
 
 ## Recent Updates (2026)
 
@@ -154,60 +266,38 @@ filmotokio/
 
 ## Database Configuration
 
-### Database-Agnostic Spring Batch Sequences (NEW 2026)
-
-The application now features **intelligent database detection** for Spring Batch sequences, automatically supporting both H2 and MySQL databases:
-
-#### **Automatic Database Detection**
-- **H2 Database:** Uses `CREATE SEQUENCE` syntax
-- **MySQL Database:** Uses `CREATE TABLE ... AUTO_INCREMENT` syntax
-- **Fallback Mechanism:** Graceful error handling with multiple fallback strategies
-
-#### **How It Works**
-```java
-// Automatic detection and sequence creation
-if (databaseType == H2) {
-    CREATE SEQUENCE IF NOT EXISTS BATCH_JOB_EXECUTION_SEQ START WITH 0 INCREMENT BY 1
-} else if (databaseType == MySQL) {
-    CREATE TABLE IF NOT EXISTS BATCH_JOB_EXECUTION_SEQ (
-        ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY
-    )
-}
-```
-
-#### **Benefits**
-- **Zero Configuration:** Works automatically with both databases
-- **Production Ready:** Seamlessly switch from H2 (dev) to MySQL (prod)
-- **Error Resilient:** Multiple fallback mechanisms
-- **Clear Logging:** Detailed database detection and creation logs
-
-### Database Options
+### **Multi-Database Support**
+The application features **intelligent database detection** for seamless switching:
 
 #### **H2 Database (Default - Development)**
-- **Type:** File-based persistence
-- **Configuration:** Pre-configured out of the box
-- **Console:** Available at `http://localhost:8080/h2-console`
-- **Data Location:** `./data/filmotokio` (project root)
-- **Benefits:** Zero setup, data persistence between restarts
+- **Zero Configuration** - Works out of the box
+- **File-based persistence** - Data survives restarts
+- **Web Console** - Available at `http://localhost:8080/h2-console`
+- **Data Location** - `./data/filmotokio`
 
 #### **MySQL Database (Production)**
-- **Setup:** Uncomment MySQL configuration in `application.properties`
-- **Requirements:** MySQL server running locally or remotely
-- **Configuration:** Update username/password in properties file
-- **Benefits:** Production-ready, scalable, multi-user support
-
-#### **Database Switching**
-Simply comment/uncomment the appropriate database configuration in `application.properties`:
-
 ```properties
-# For H2 (Default)
-spring.datasource.url=jdbc:h2:file:./data/filmotokio;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
-
-# For MySQL (Production)
-# spring.datasource.url=jdbc:mysql://localhost:3306/filmotokio?createDatabaseIfNotExist=true
-# spring.datasource.username=your_username
-# spring.datasource.password=your_password
+# application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/filmotokio?createDatabaseIfNotExist=true
+spring.datasource.username=your_mysql_user
+spring.datasource.password=your_mysql_password
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 ```
+
+#### **PostgreSQL Database (Alternative)**
+```properties
+# application.properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/filmotokio
+spring.datasource.username=your_postgres_user
+spring.datasource.password=your_postgres_password
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
+
+### **Database-Agnostic Spring Batch Sequences**
+Automatic detection and creation of Spring Batch sequences for both H2 and MySQL:
+- **H2:** Uses `CREATE SEQUENCE` syntax
+- **MySQL:** Uses `CREATE TABLE ... AUTO_INCREMENT` syntax
+- **Fallback:** Graceful error handling with multiple strategies
 
 ## Design and UX/UI
 
@@ -227,70 +317,77 @@ spring.datasource.url=jdbc:h2:file:./data/filmotokio;AUTO_SERVER=TRUE;DB_CLOSE_D
 - Overlay effects on movie posters with perfect centering
 - Responsive grids that adapt to all screen sizes
 
-## Installation and Setup
+## Quick Start
 
-### Prerequisites
-- Java 17 (Required - project configured for Java 17)
-- Maven 3.6+
-- **H2 Database** (Built-in, file-based persistence - Default)
-- **MySQL/PostgreSQL** (Optional for production)
-- IDE (IntelliJ/Eclipse)
+### **Prerequisites**
+- **Java 17** (Required - project configured for Java 17)
+- **Maven 3.6+**
+- **IDE** (IntelliJ/Eclipse)
 
-### Quick Start with H2 (Recommended for Development)
+### **Zero-Configuration Setup with H2**
 
-The project comes pre-configured with H2 Database with file-based persistence - no additional setup needed!
+The project comes **pre-configured with H2 Database** - no additional setup needed!
 
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/KTVDCarvalho/filmotokio.git
    cd filmotokio
    ```
 
-2. **IMPORTANT:** Set Java 17 environment (required for this project):
+2. **Set Java 17 environment:**
    ```bash
-   # The project is configured for Java 17 - using Java 25+ will cause compilation errors
    export JAVA_HOME=/Library/Java/JavaVirtualMachines/microsoft-17.jdk/Contents/Home
-   
-   # Verify Java version
-   java -version
-   # Should show: java version "17.0.18" or similar 17.x version
+   java -version  # Should show: java version "17.x.x"
    ```
 
-3. The uploads directory should already exist with sample poster images:
-   ```bash
-   # Verify uploads directory exists (should contain poster images)
-   ls -la uploads/
-   ```
-
-4. Run the application:
+3. **Run the application:**
    ```bash
    mvn spring-boot:run
    ```
 
-5. Access in the browser:
-   ```
-   http://localhost:8080
-   ```
+4. **Access the application:**
+   - **Main App:** http://localhost:8080
+   - **H2 Console:** http://localhost:8080/h2-console
 
-6. **H2 Console (Development):**
-   ```
-   http://localhost:8080/h2-console
-   ```
-   - JDBC URL: `jdbc:h2:file:./data/filmotokio;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1`
-   - Username: `sa`
-   - Password: (leave blank)
+### **Default Credentials**
+```
+Username: tokioschool
+Password: Tokioschool
+Role: ADMIN
+```
 
-### Default Login Credentials
-- Username: `tokioschool`
-- Password: `Tokioschool`
-- Role: `ADMIN`
+### **Sample Data Included**
+The application automatically creates sample films:
+- **Interstellar** (2014)
+- **Dark** (2017) 
+- **From** (2022)
+- **The Shawshank Redemption** (1994)
 
-### Sample Data
-The application automatically creates sample films with working posters:
-- Interstellar (2014) - Poster: `/uploads/Interstellar.jpg`
-- Dark (2017) - Poster: `/uploads/Dark.jpg`
-- From (2022) - Poster: `/uploads/From.jpg`
-- The Shawshank Redemption (1994) - Poster: `/uploads/The Shawshank Redemption.jpg`
+## Project Architecture
+
+```
+filmotokio/
+├── src/main/java/filmotokio/
+│   ├── controller/          # REST controllers and web endpoints
+│   ├── model/              # JPA entities (Film, Person, User, Review)
+│   ├── repository/         # Spring Data repositories
+│   ├── service/            # Business logic services
+│   ├── util/               # Utility classes (StarRatingUtil, etc.)
+│   └── config/             # Security and configuration
+├── src/main/resources/
+│   ├── templates/          # Thymeleaf HTML templates
+│   │   ├── fragments/      # Reusable template fragments
+│   │   ├── admin/          # Admin panel pages
+│   │   └── *.html          # Main application pages
+│   └── static/
+│       ├── css/            # Professional CSS architecture
+│       ├── js/             # JavaScript files
+│       └── images/         # Static images
+├── uploads/                # User uploaded content
+├── pom.xml                 # Maven configuration
+├── LICENSE                 # MIT License
+└── README.md              # This file
+```
 
 ### Production Setup (MySQL/PostgreSQL)
 
@@ -322,157 +419,162 @@ For production deployment, you can switch to MySQL or PostgreSQL:
 
 ## Troubleshooting
 
-### Common Issues and Solutions
+### **Common Issues & Solutions**
 
 #### **Java Version Issues**
-```
+```bash
 Error: Fatal error compiling: java.lang.ExceptionInInitializerError
 ```
-**Solution:** The project requires Java 17. Using Java 25+ will cause compilation errors.
+**Solution:** The project requires **Java 17**
 ```bash
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/microsoft-17.jdk/Contents/Home
 java -version  # Should show 17.x.x
 ```
 
 #### **Port 8080 Already in Use**
-```
+```bash
 Error: Port 8080 was already in use
 ```
-**Solution:** Kill the process using port 8080
+**Solution:** Kill the process
 ```bash
 lsof -ti:8080 | xargs kill -9
 ```
 
 #### **Spring Batch Sequence Errors**
-```
+```bash
 Error: Sequence "BATCH_JOB_SEQ" not found
 ```
-**Solution:** The application now handles this automatically with database-agnostic sequences. If issues persist, restart the application.
-
-#### **MySQL Connection Errors**
-```
-Error: Access denied for user 'filomotokio'@'localhost'
-```
-**Solution:** Ensure MySQL database and user are properly configured:
-```sql
-CREATE DATABASE filmotokio;
-CREATE USER 'filomotokio'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON filmotokio.* TO 'filomotokio'@'localhost';
-```
+**Solution:** The application handles this automatically. Restart if issues persist.
 
 #### **Poster Images Not Displaying**
-**Solution:** Ensure uploads directory exists with poster images:
+**Solution:** Verify uploads directory
 ```bash
 ls -la uploads/
 # Should contain: Interstellar.jpg, Dark.jpg, From.jpg, The Shawshank Redemption.jpg
 ```
 
-### Getting Help
-If you encounter issues:
-1. Check the application logs for detailed error messages
-2. Verify Java 17 is being used: `java -version`
-3. Ensure database configuration is correct in `application.properties`
-4. Check that port 8080 is available
+## Security Features
 
-## Security
-
-- Authentication with Spring Security
-- Passwords encrypted with BCrypt
-- Role-based access control (USER/ADMIN)
-- CSRF protection and input validation
-- Secure file uploads with type validation
-- Session management with timeout controls
+- **Spring Security** with comprehensive authentication
+- **BCrypt Encryption** for password security
+- **Role-Based Access Control** (USER/ADMIN)
+- **CSRF Protection** and input validation
+- **Secure File Uploads** with type validation
+- **Session Management** with timeout controls
 
 ## Data Model
 
-### Core Entities
-- Film: id, title, year, duration, synopsis, poster_url
-- Person: id, name, surname, type (ACTOR, DIRECTOR, etc.)
-- User: id, name, surname, username, email, password, role, image
-- Review: id, rating, comment, user_id, film_id
-- Role: id, name (USER, ADMIN)
+### **Core Entities**
+- **Film:** id, title, year, duration, synopsis, poster_url
+- **Person:** id, name, surname, type (ACTOR, DIRECTOR, etc.)
+- **User:** id, name, surname, username, email, password, role, image
+- **Review:** id, rating, comment, user_id, film_id
+- **Role:** id, name (USER, ADMIN)
 
-### Key Relationships
-- Film ↔ Person: Many-to-many (through film_person table)
-- Film ↔ Review: One-to-many
-- User ↔ Review: One-to-many
-- User ↔ Role: Many-to-one
+### **Relationships**
+- **Film ↔ Person:** Many-to-many (through film_person table)
+- **Film ↔ Review:** One-to-many
+- **User ↔ Review:** One-to-many
+- **User ↔ Role:** Many-to-one
 
-## APIs and Endpoints
+## API Endpoints
 
-### Public Endpoints
-- GET / - Home page with featured films
-- GET /films - Movie list with pagination
-- GET /films/{id} - Movie details page
-- POST /films - Create new movie (ADMIN)
-- GET /search - Movie search interface
-- POST /login - User authentication
-- POST /register - User registration
-- GET /profile - User profile page
+### **Public Endpoints**
+- `GET /` - Home page with featured films
+- `GET /films` - Movie list with pagination
+- `GET /films/{id}` - Movie details page
+- `POST /films` - Create new movie (ADMIN)
+- `GET /search` - Movie search interface
+- `POST /login` - User authentication
+- `POST /register` - User registration
+- `GET /profile` - User profile page
 
-### Admin Endpoints
-- GET /admin - Admin dashboard
-- POST /admin/register - Register new users
-- GET /admin/migration - Data migration interface
-- POST /profile/upload-photo - Profile photo upload
+### **Admin Endpoints**
+- `GET /admin` - Admin dashboard
+- `POST /admin/register` - Register new users
+- `GET /admin/migration` - Data migration interface
+- `POST /profile/upload-photo` - Profile photo upload
 
-## Highlights
+## Project Highlights
 
-### Premium Interface
-- Glass morphism effects with backdrop filters
-- Enhanced star rating system with directional animations
-- Responsive design that works on all devices
-- Smooth transitions and micro-interactions
+### **Interface Features**
+- Clean and functional design
+- Star rating system for films
+- Responsive layout for different devices
+- Basic transitions and hover effects
 
-### Performance
+### **Performance**
 - Optimized database queries with JPA
-- Efficient image handling with proper caching
-- Minified CSS/JS for faster loading
-- Lazy loading for large datasets
+- Efficient image handling
+- Organized CSS/JS structure
+- Basic lazy loading for film lists
 
-### Technical Excellence
-- Clean, well-structured code with proper documentation
-- Comprehensive error handling and validation
-- Unit tests for critical business logic
-- Debug endpoints for development support
+### **Code Quality**
+- Well-structured code with documentation
+- Proper error handling and validation
+- Logging for debugging
+- Separation of concerns
 
-## Future Improvements
+## Future Roadmap
 
-### Short Term
-- REST API for mobile applications
-- Movie recommendation system based on user preferences
-- Integration with external APIs (TMDB, IMDb)
-- Enhanced image upload with compression and optimization
+### **Short Term**
+- **REST API** for mobile applications
+- **Movie Recommendation System** based on user preferences
+- **External API Integration** (TMDB, IMDb)
+- **Enhanced Image Upload** with compression and optimization
 
-### Long Term
-- Notification system for new releases and reviews
-- Real-time chat for film discussions
-- Dockerization and container deployment
-- CI/CD pipeline with automated testing
-- Mobile applications (React Native/Flutter)
+### **Long Term**
+- **Notification System** for new releases and reviews
+- **Real-time Chat** for film discussions
+- **Dockerization** and container deployment
+- **CI/CD Pipeline** with automated testing
+- **Mobile Applications** (React Native/Flutter)
 
-## Author
+## About the Author
 
-Kiniame Tarquinio Vieira Dias de Carvalho
+### **Kiniame Tarquinio Vieira Dias de Carvalho**
 
-- GitHub: https://github.com/KTVDCarvalho
-- Email: kiniame.carvalho@icloud.com
+**Full Stack Java Developer** passionate about creating sophisticated web applications with modern technologies.
+
+#### **Connect With Me**
+- **GitHub:** [KTVDCarvalho](https://github.com/KTVDCarvalho)
+- **Email:** [kiniame.carvalho@icloud.com](mailto:kiniame.carvalho@icloud.com)
+- **LinkedIn:** [Connect with me](https://linkedin.com/in/kiniame-carvalho)
+
+#### **Technical Expertise**
+- **Backend:** Java, Spring Boot, Spring Security, JPA, Microservices
+- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap, Thymeleaf
+- **Databases:** H2, MySQL, PostgreSQL, MongoDB
+- **Tools:** Maven, Git, Docker, CI/CD
+
+---
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
+### **Contribution Guidelines**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
 ## Support
 
-If you have any questions or need support, please:
-- Open an issue on GitHub
-- Contact the author directly
-- Check the documentation
+If you have any questions or need support:
+- **Open an issue** on [GitHub](https://github.com/KTVDCarvalho/filmotokio/issues)
+- **Contact the author** directly
+- **Check the documentation**
 
 ---
 
-FILMOTOKIO - Your Complete Movie Management Solution
+# FILMOTOKIO - Your Complete Movie Management Solution
+
+**Built with passion using Java 17 + Spring Boot + Modern Web Technologies**
+
+*showcasing enterprise-grade development skills with a focus on user experience and technical excellence*
