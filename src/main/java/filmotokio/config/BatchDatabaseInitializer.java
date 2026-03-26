@@ -53,10 +53,8 @@ public class BatchDatabaseInitializer {
             jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_EXECUTION_CONTEXT");
             jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_EXECUTION");
             jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_INSTANCE");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_STEP_EXECUTION_SEQ");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_EXECUTION_SEQ");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_SEQ");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_STEP_SEQ");
+            // Drop sequences (handle both H2 and MySQL)
+            dropSequencesForDatabase(jdbcTemplate);
         } catch (Exception e) {
             // Log debug message if tables don't exist yet
             logger.debug("[BatchDatabaseInitializer] - Tables may not exist yet: {}", e.getMessage());
@@ -153,43 +151,132 @@ public class BatchDatabaseInitializer {
             )
         """);
 
-        // Create sequence tables for generating IDs
+        // Create sequences based on database type
+        createSequencesForDatabase(jdbcTemplate);
+    }
+
+    /**
+     * Drops sequences based on the database type (H2 vs MySQL)
+     */
+    private void dropSequencesForDatabase(JdbcTemplate jdbcTemplate) {
+        try {
+            // Try to detect database type
+            String databaseName = jdbcTemplate.queryForObject("SELECT DATABASE()", String.class);
+            
+            if (databaseName != null && (databaseName.toLowerCase().contains("h2") || 
+                jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName().toLowerCase().contains("h2"))) {
+                // H2 Database - use DROP SEQUENCE syntax
+                logger.debug("[BatchDatabaseInitializer] - Dropping H2 sequences");
+                jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_JOB_EXECUTION_SEQ");
+                jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_STEP_EXECUTION_SEQ");
+                jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_JOB_SEQ");
+                jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_STEP_SEQ");
+            } else {
+                // MySQL Database - use DROP TABLE syntax
+                logger.debug("[BatchDatabaseInitializer] - Dropping MySQL sequence tables");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_EXECUTION_SEQ");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_STEP_EXECUTION_SEQ");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_SEQ");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_STEP_SEQ");
+            }
+        } catch (Exception e) {
+            // Fallback: try both DROP TABLE and DROP SEQUENCE
+            logger.debug("[BatchDatabaseInitializer] - Could not detect database type for dropping sequences, trying both methods");
+            try {
+                // Try MySQL first
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_EXECUTION_SEQ");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_STEP_EXECUTION_SEQ");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_JOB_SEQ");
+                jdbcTemplate.execute("DROP TABLE IF EXISTS BATCH_STEP_SEQ");
+            } catch (Exception tableException) {
+                try {
+                    // Try H2
+                    jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_JOB_EXECUTION_SEQ");
+                    jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_STEP_EXECUTION_SEQ");
+                    jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_JOB_SEQ");
+                    jdbcTemplate.execute("DROP SEQUENCE IF EXISTS BATCH_STEP_SEQ");
+                } catch (Exception sequenceException) {
+                    // Ignore errors during cleanup
+                    logger.debug("[BatchDatabaseInitializer] - Could not drop sequences: {}", sequenceException.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates sequences based on the database type (H2 vs MySQL)
+     */
+    private void createSequencesForDatabase(JdbcTemplate jdbcTemplate) {
+        try {
+            // Try to detect database type
+            String databaseName = jdbcTemplate.queryForObject("SELECT DATABASE()", String.class);
+            
+            if (databaseName != null && (databaseName.toLowerCase().contains("h2") || 
+                jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName().toLowerCase().contains("h2"))) {
+                // H2 Database - use SEQUENCE syntax
+                logger.info("[BatchDatabaseInitializer] - Creating sequences for H2 database");
+                createH2Sequences(jdbcTemplate);
+            } else {
+                // MySQL Database - use AUTO_INCREMENT tables
+                logger.info("[BatchDatabaseInitializer] - Creating sequences for MySQL database");
+                createMySQLSequences(jdbcTemplate);
+            }
+        } catch (Exception e) {
+            // Fallback: try MySQL first, then H2 if MySQL fails
+            logger.debug("[BatchDatabaseInitializer] - Could not detect database type, trying MySQL syntax first");
+            try {
+                createMySQLSequences(jdbcTemplate);
+                logger.info("[BatchDatabaseInitializer] - Successfully created MySQL-style sequences");
+            } catch (Exception mysqlException) {
+                logger.debug("[BatchDatabaseInitializer] - MySQL syntax failed, trying H2 syntax");
+                try {
+                    createH2Sequences(jdbcTemplate);
+                    logger.info("[BatchDatabaseInitializer] - Successfully created H2-style sequences");
+                } catch (Exception h2Exception) {
+                    logger.error("[BatchDatabaseInitializer] - Failed to create sequences for both MySQL and H2");
+                    throw new RuntimeException("Failed to create batch sequences", h2Exception);
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates sequences using H2 SEQUENCE syntax
+     */
+    private void createH2Sequences(JdbcTemplate jdbcTemplate) {
+        jdbcTemplate.execute("CREATE SEQUENCE IF NOT EXISTS BATCH_JOB_EXECUTION_SEQ START WITH 0 INCREMENT BY 1");
+        jdbcTemplate.execute("CREATE SEQUENCE IF NOT EXISTS BATCH_STEP_EXECUTION_SEQ START WITH 0 INCREMENT BY 1");
+        jdbcTemplate.execute("CREATE SEQUENCE IF NOT EXISTS BATCH_JOB_SEQ START WITH 0 INCREMENT BY 1");
+        jdbcTemplate.execute("CREATE SEQUENCE IF NOT EXISTS BATCH_STEP_SEQ START WITH 0 INCREMENT BY 1");
+    }
+
+    /**
+     * Creates sequences using MySQL AUTO_INCREMENT table syntax
+     */
+    private void createMySQLSequences(JdbcTemplate jdbcTemplate) {
         jdbcTemplate.execute("""
-            CREATE TABLE BATCH_JOB_EXECUTION_SEQ (
-                ID BIGINT NOT NULL PRIMARY KEY,
-                ORDER_VAL BIGINT,
-                unique (ID)
+            CREATE TABLE IF NOT EXISTS BATCH_JOB_EXECUTION_SEQ (
+                ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                UNIQUE (ID)
             )
         """);
-
         jdbcTemplate.execute("""
-            CREATE TABLE BATCH_STEP_EXECUTION_SEQ (
-                ID BIGINT NOT NULL PRIMARY KEY,
-                ORDER_VAL BIGINT,
-                unique (ID)
+            CREATE TABLE IF NOT EXISTS BATCH_STEP_EXECUTION_SEQ (
+                ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                UNIQUE (ID)
             )
         """);
-
         jdbcTemplate.execute("""
-            CREATE TABLE BATCH_JOB_SEQ (
-                ID BIGINT NOT NULL PRIMARY KEY,
-                ORDER_VAL BIGINT,
-                unique (ID)
+            CREATE TABLE IF NOT EXISTS BATCH_JOB_SEQ (
+                ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                UNIQUE (ID)
             )
         """);
-
         jdbcTemplate.execute("""
-            CREATE TABLE BATCH_STEP_SEQ (
-                ID BIGINT NOT NULL PRIMARY KEY,
-                ORDER_VAL BIGINT,
-                unique (ID)
+            CREATE TABLE IF NOT EXISTS BATCH_STEP_SEQ (
+                ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                UNIQUE (ID)
             )
         """);
-
-        // Insert initial sequence values
-        jdbcTemplate.update("INSERT INTO BATCH_JOB_EXECUTION_SEQ (ID, ORDER_VAL) values (0, 0)");
-        jdbcTemplate.update("INSERT INTO BATCH_STEP_EXECUTION_SEQ (ID, ORDER_VAL) values (0, 0)");
-        jdbcTemplate.update("INSERT INTO BATCH_JOB_SEQ (ID, ORDER_VAL) values (0, 0)");
-        jdbcTemplate.update("INSERT INTO BATCH_STEP_SEQ (ID, ORDER_VAL) values (0, 0)");
     }
 }

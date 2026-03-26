@@ -1,6 +1,6 @@
 # FILMOTOKIO
 
-FILMOTOKIO is a full-featured web application for managing movie databases, developed in Java 17 with Spring Boot 3.x, offering a modern and responsive interface for managing movies, artists, reviews, and users.
+FILMOTOKIO is a full-featured web application for managing movie databases, developed in Java 17 with Spring Boot 2.7.18, offering a modern and responsive interface for managing movies, artists, reviews, and users.
 
 ## Overview
 
@@ -12,14 +12,14 @@ The system allows:
 - Administrative panel for managing users, movies, and data migration
 - Advanced search functionality with intelligent filtering
 - Premium dark theme with glass morphism design
-- **NEW:** Professional CSS architecture with design system and optimized performance
-- **NEW:** Comprehensive form validation with user-friendly error messages
-- **NEW:** Enhanced UI components with scalable images and responsive design
+- **H2 Database** with file-based persistence for development
+- **Poster management** with working image display system
+- **Java 17 compatibility** with proper Lombok configuration
 
 ## Technologies Used
 
 ### Backend
-- Java 17+
+- Java 17
 - Spring Boot 2.7.18
 - Spring Data JPA
 - Spring MVC
@@ -27,16 +27,16 @@ The system allows:
 - Spring Batch Processing
 - Spring Scheduling
 - Maven
-- **H2 Database** (In-memory for development - Default)
+- **H2 Database** (File-based for development - Default)
 - **MySQL Database** (Production ready)
 - **PostgreSQL** (Alternative production option)
 
 ### Frontend
 - Semantic HTML5 with Thymeleaf
-- **NEW:** Advanced CSS3 with design system and CSS variables
-- **NEW:** Glass morphism effects and modern animations
-- **NEW:** Responsive design with mobile-first approach
-- **NEW:** Professional component-based CSS architecture
+- **Advanced CSS3** with design system and CSS variables
+- **Glass morphism effects** and modern animations
+- **Responsive design** with mobile-first approach
+- **Professional component-based CSS architecture
 - Bootstrap 5.3.2
 - Font Awesome 6.5.1
 - Vanilla JavaScript
@@ -50,30 +50,28 @@ The system allows:
 
 ## Recent Updates (2026)
 
-### CSS Architecture Overhaul
-- **Design System:** Implemented comprehensive CSS variables system
-- **Performance:** Reduced code repetition by 80% with centralized variables
-- **Organization:** Created modular CSS architecture with clear separation
-- **Documentation:** Added professional headers and comprehensive guides
-- **Legacy Management:** Organized deprecated code with migration timeline
+### Database & Configuration Fixes
+- **Java 17 Compatibility:** Fixed Lombok compatibility issues for Java 17
+- **H2 Database:** Configured with file-based persistence for data retention
+- **Spring Batch:** Fixed sequence creation for H2 database compatibility
+- **Database-Agnostic Sequences:** NEW - Automatic detection and support for both H2 and MySQL databases
+- **Multi-Database Support:** Seamless switching between H2 (development) and MySQL (production)
+- **Poster Display:** Resolved poster image loading issues with correct path mapping
+- **Web Configuration:** Updated static resource handling for uploads directory
 
 ### Enhanced User Experience
-- **Form Validation:** Comprehensive validation with user-friendly error messages
-- **Image Optimization:** Scalable images with proper aspect ratio handling
-- **Responsive Design:** Mobile-first approach with breakpoint optimization
-- **Search UI:** Improved search bar with icon positioning fixes
-- **Profile Layout:** Wider profile containers for better content display
+- **Poster System:** Working poster display for all films (home, detail, search pages)
+- **Data Initialization:** Automatic sample data creation with proper poster paths
+- **Home Page:** Streamlined layout with featured films section
+- **Image Management:** Proper upload directory configuration and serving
 
 ### Code Quality Improvements
-- **Professional Headers:** Added copyright and documentation to all Java classes
-- **Debug Security:** Enhanced debug controller with security warnings
-- **Clean Code:** Removed unused imports and optimized code structure
-- **Documentation:** Complete README files for project and CSS architecture
-
-### Footer Enhancements
-- **GitHub Integration:** Added professional GitHub link in footer
-- **Copyright:** Updated copyright attribution to project owner
-- **Social Links:** Organized social media links with GitHub prominence
+- **Java 17 Support:** Full compatibility with proper environment setup
+- **Database Schema:** Fixed Spring Batch sequence creation for H2
+- **Database-Agnostic Architecture:** Intelligent database detection and sequence handling
+- **Fallback Mechanisms:** Robust error handling with multiple database syntax support
+- **Static Resources:** Corrected file serving configuration
+- **Error Handling:** Improved startup and runtime error resolution
 
 ## Project Structure
 
@@ -154,6 +152,63 @@ filmotokio/
 - **Database-agnostic queries** for cross-platform compatibility
 - **Migration system** for data export and backup
 
+## Database Configuration
+
+### Database-Agnostic Spring Batch Sequences (NEW 2026)
+
+The application now features **intelligent database detection** for Spring Batch sequences, automatically supporting both H2 and MySQL databases:
+
+#### **Automatic Database Detection**
+- **H2 Database:** Uses `CREATE SEQUENCE` syntax
+- **MySQL Database:** Uses `CREATE TABLE ... AUTO_INCREMENT` syntax
+- **Fallback Mechanism:** Graceful error handling with multiple fallback strategies
+
+#### **How It Works**
+```java
+// Automatic detection and sequence creation
+if (databaseType == H2) {
+    CREATE SEQUENCE IF NOT EXISTS BATCH_JOB_EXECUTION_SEQ START WITH 0 INCREMENT BY 1
+} else if (databaseType == MySQL) {
+    CREATE TABLE IF NOT EXISTS BATCH_JOB_EXECUTION_SEQ (
+        ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY
+    )
+}
+```
+
+#### **Benefits**
+- **Zero Configuration:** Works automatically with both databases
+- **Production Ready:** Seamlessly switch from H2 (dev) to MySQL (prod)
+- **Error Resilient:** Multiple fallback mechanisms
+- **Clear Logging:** Detailed database detection and creation logs
+
+### Database Options
+
+#### **H2 Database (Default - Development)**
+- **Type:** File-based persistence
+- **Configuration:** Pre-configured out of the box
+- **Console:** Available at `http://localhost:8080/h2-console`
+- **Data Location:** `./data/filmotokio` (project root)
+- **Benefits:** Zero setup, data persistence between restarts
+
+#### **MySQL Database (Production)**
+- **Setup:** Uncomment MySQL configuration in `application.properties`
+- **Requirements:** MySQL server running locally or remotely
+- **Configuration:** Update username/password in properties file
+- **Benefits:** Production-ready, scalable, multi-user support
+
+#### **Database Switching**
+Simply comment/uncomment the appropriate database configuration in `application.properties`:
+
+```properties
+# For H2 (Default)
+spring.datasource.url=jdbc:h2:file:./data/filmotokio;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
+
+# For MySQL (Production)
+# spring.datasource.url=jdbc:mysql://localhost:3306/filmotokio?createDatabaseIfNotExist=true
+# spring.datasource.username=your_username
+# spring.datasource.password=your_password
+```
+
 ## Design and UX/UI
 
 ### Visual Features
@@ -175,13 +230,15 @@ filmotokio/
 ## Installation and Setup
 
 ### Prerequisites
-- Java 17+
+- Java 17 (Required - project configured for Java 17)
 - Maven 3.6+
-- **H2 Database** (Built-in, no setup required - Default)
+- **H2 Database** (Built-in, file-based persistence - Default)
 - **MySQL/PostgreSQL** (Optional for production)
 - IDE (IntelliJ/Eclipse)
 
-### Steps
+### Quick Start with H2 (Recommended for Development)
+
+The project comes pre-configured with H2 Database with file-based persistence - no additional setup needed!
 
 1. Clone the repository:
    ```bash
@@ -189,69 +246,133 @@ filmotokio/
    cd filmotokio
    ```
 
-2. Copy the application properties template:
+2. **IMPORTANT:** Set Java 17 environment (required for this project):
    ```bash
-   cp src/main/resources/application.properties.template src/main/resources/application.properties
+   # The project is configured for Java 17 - using Java 25+ will cause compilation errors
+   export JAVA_HOME=/Library/Java/JavaVirtualMachines/microsoft-17.jdk/Contents/Home
+   
+   # Verify Java version
+   java -version
+   # Should show: java version "17.0.18" or similar 17.x version
    ```
 
-3. Configure the database in `application.properties`:
-
-   **The project comes pre-configured with H2 Database by default** - no additional setup needed for development!
-
-   **Option 1: H2 Database (Default for Development)**
-   ```properties
-   # Already configured by default - no changes needed
-   spring.datasource.url=jdbc:h2:mem:filmotokio
-   spring.datasource.username=sa
-   spring.datasource.password=
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
-   ```
-
-   **Option 2: MySQL Database (For Production)**
-   ```properties
-   # Comment H2 configurations above and uncomment these:
-   # spring.datasource.url=jdbc:mysql://localhost:3306/filmotokio?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
-   # spring.datasource.username=your_mysql_user
-   # spring.datasource.password=your_mysql_password
-   # spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
-   ```
-
-   **Option 3: PostgreSQL Database (Production Alternative)**
-   ```properties
-   # Comment H2 configurations above and uncomment these:
-   # spring.datasource.url=jdbc:postgresql://localhost:5432/filmotokio
-   # spring.datasource.username=your_postgres_user
-   # spring.datasource.password=your_postgres_password
-   # spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-   ```
-
-   **Tip:** To switch between databases, just comment/uncomment the corresponding lines!
-
-4. Create the uploads directory:
+3. The uploads directory should already exist with sample poster images:
    ```bash
-   mkdir -p uploads
+   # Verify uploads directory exists (should contain poster images)
+   ls -la uploads/
    ```
 
-5. Run the application:
+4. Run the application:
    ```bash
    mvn spring-boot:run
    ```
 
-6. Access in the browser:
+5. Access in the browser:
    ```
    http://localhost:8080
    ```
 
-   **H2 Console (Development Only):**
+6. **H2 Console (Development):**
    ```
    http://localhost:8080/h2-console
    ```
-   - JDBC URL: `jdbc:h2:mem:filmotokio`
+   - JDBC URL: `jdbc:h2:file:./data/filmotokio;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1`
    - Username: `sa`
    - Password: (leave blank)
-   
-   **Note:** H2 console is only available when H2 database is configured
+
+### Default Login Credentials
+- Username: `tokioschool`
+- Password: `Tokioschool`
+- Role: `ADMIN`
+
+### Sample Data
+The application automatically creates sample films with working posters:
+- Interstellar (2014) - Poster: `/uploads/Interstellar.jpg`
+- Dark (2017) - Poster: `/uploads/Dark.jpg`
+- From (2022) - Poster: `/uploads/From.jpg`
+- The Shawshank Redemption (1994) - Poster: `/uploads/The Shawshank Redemption.jpg`
+
+### Production Setup (MySQL/PostgreSQL)
+
+For production deployment, you can switch to MySQL or PostgreSQL:
+
+1. **MySQL Database Setup:**
+   ```properties
+   # In application.properties, comment H2 config and uncomment:
+   spring.datasource.url=jdbc:mysql://localhost:3306/filmotokio?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+   spring.datasource.username=your_mysql_user
+   spring.datasource.password=your_mysql_password
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+   ```
+
+2. **PostgreSQL Database Setup:**
+   ```properties
+   # In application.properties, comment H2 config and uncomment:
+   spring.datasource.url=jdbc:postgresql://localhost:5432/filmotokio
+   spring.datasource.username=your_postgres_user
+   spring.datasource.password=your_postgres_password
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+   ```
+
+### Database Features
+- **H2:** File-based persistence (data survives restarts)
+- **Automatic schema management** with Hibernate DDL
+- **Database-agnostic queries** for cross-platform compatibility
+- **Migration system** for data export and backup
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### **Java Version Issues**
+```
+Error: Fatal error compiling: java.lang.ExceptionInInitializerError
+```
+**Solution:** The project requires Java 17. Using Java 25+ will cause compilation errors.
+```bash
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/microsoft-17.jdk/Contents/Home
+java -version  # Should show 17.x.x
+```
+
+#### **Port 8080 Already in Use**
+```
+Error: Port 8080 was already in use
+```
+**Solution:** Kill the process using port 8080
+```bash
+lsof -ti:8080 | xargs kill -9
+```
+
+#### **Spring Batch Sequence Errors**
+```
+Error: Sequence "BATCH_JOB_SEQ" not found
+```
+**Solution:** The application now handles this automatically with database-agnostic sequences. If issues persist, restart the application.
+
+#### **MySQL Connection Errors**
+```
+Error: Access denied for user 'filomotokio'@'localhost'
+```
+**Solution:** Ensure MySQL database and user are properly configured:
+```sql
+CREATE DATABASE filmotokio;
+CREATE USER 'filomotokio'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON filmotokio.* TO 'filomotokio'@'localhost';
+```
+
+#### **Poster Images Not Displaying**
+**Solution:** Ensure uploads directory exists with poster images:
+```bash
+ls -la uploads/
+# Should contain: Interstellar.jpg, Dark.jpg, From.jpg, The Shawshank Redemption.jpg
+```
+
+### Getting Help
+If you encounter issues:
+1. Check the application logs for detailed error messages
+2. Verify Java 17 is being used: `java -version`
+3. Ensure database configuration is correct in `application.properties`
+4. Check that port 8080 is available
 
 ## Security
 
