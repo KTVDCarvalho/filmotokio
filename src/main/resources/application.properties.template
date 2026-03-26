@@ -1,0 +1,71 @@
+# Hey there! This is your Spring Boot config template
+# Just copy this to application.properties and fill in your stuff
+
+spring.application.name=FILMOTOKIO
+
+# Database Configuration - Choose ONE of the following:
+
+# OPTION 1: H2 Database (Recommended for development)
+# File-based database to avoid exclusive mode issues
+spring.datasource.url=jdbc:h2:file:./data/filmotokio;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# Enable H2 Console (accessible at http://localhost:8080/h2-console)
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+spring.h2.console.settings.web-allow-others=true
+
+# OPTION 2: MySQL Database (For production)
+# Uncomment these lines and comment out H2 configuration above
+# spring.datasource.url=jdbc:mysql://localhost:3306/filmotokio?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+# spring.datasource.username=YOUR_DB_USERNAME
+# spring.datasource.password=YOUR_DB_PASSWORD
+# spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA/Hibernate settings
+# update mode is great for development - it creates tables automatically
+# show-sql helps you see what's happening under the hood
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# Database dialect - change based on your database choice
+# For H2: org.hibernate.dialect.H2Dialect
+# For MySQL: org.hibernate.dialect.MySQL8Dialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
+
+# File upload limits - change these if you need bigger files
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+
+# Some server tweaks for handling lots of data
+# You probably don't need to touch these unless you get errors
+server.tomcat.max-swallow-size=20000
+spring.webflux.multipart.max-in-memory-size=20000
+server.tomcat.max-parameters=1000
+server.tomcat.max-http-form-post-size=100000
+
+# This lets Spring handle some tricky dependency situations
+# Leave it as is unless you know what you're doing
+spring.main.allow-circular-references=true
+
+# JWT token stuff for user authentication
+# SERIOUSLY - generate a new secret key for production!
+# Just run this command: openssl rand -base64 32
+jwt.secret=GENERATE_SECURE_RANDOM_KEY_HERE
+jwt.expiration=86400000
+
+# Spring Batch settings
+# We're not running batch jobs automatically, but the schema is set up
+spring.batch.job.enabled=false
+spring.batch.initialize-schema=always
+spring.batch.jdbc.isolation-level-for-create=default
+
+# Debug logging - super helpful when you're troubleshooting
+# You can turn these off or change to INFO/WARN/ERROR in production
+logging.level.FILMOTOKIO.filmotokio.security=DEBUG
+logging.level.org.springframework.filmotokio.security=DEBUG
+logging.level.FILMOTOKIO.controller=DEBUG
+logging.level.FILMOTOKIO.filmotokio.service=DEBUG

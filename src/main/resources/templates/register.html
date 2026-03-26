@@ -1,0 +1,160 @@
+<!-- Registration page template -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | FILMOTOKIO</title>
+
+    <!-- Bootstrap CSS framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+<!-- Enhanced dark gradient background with animated particles effect -->
+<body style="background: linear-gradient(135deg, #0a0a0a, #1a1a1a); min-height: 100vh; position: relative;">
+
+<!-- Animated background particles -->
+<div class="bg-particles">
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+</div>
+
+<!-- Authentication card container -->
+<div class="auth-card">
+
+    <!-- Application title with branding -->
+    <div class="auth-title">
+        <div class="title-icon-container">
+            <i class="fas fa-user-plus title-icon"></i>
+        </div>
+        FILMO<span>TOKIO</span>
+    </div>
+
+    <!-- Enhanced error message display with icon -->
+    <div th:if="${error}" class="alert alert-danger enhanced-alert" role="alert">
+        <i class="fas fa-exclamation-triangle alert-icon"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Registration requirements reminder -->
+    <div class="requirements-reminder">
+        <div class="reminder-header">
+            <i class="fas fa-info-circle reminder-icon"></i>
+            <span>Registration Requirements</span>
+        </div>
+        <ul class="requirements-list">
+            <li><i class="fas fa-check requirement-icon"></i> Name and Surname: minimum 3 characters</li>
+            <li><i class="fas fa-check requirement-icon"></i> Username: minimum 3 characters</li>
+            <li><i class="fas fa-check requirement-icon"></i> Email: must be a valid email address</li>
+            <li><i class="fas fa-check requirement-icon"></i> Password: minimum 6 characters</li>
+            <li><i class="fas fa-check requirement-icon"></i> Birth Date: required for age verification</li>
+            <li><i class="fas fa-check requirement-icon"></i> Profile Picture: automatically assigned</li>
+        </ul>
+    </div>
+
+    <!-- User registration form -->
+    <form th:action="@{/register}" th:object="${user}" method="post" class="auth-form">
+        <!-- Enhanced name input field with icon -->
+        <div class="input-group enhanced-input">
+            <div class="input-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="Name (min 3 characters)" minlength="3" required>
+            <div class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+        
+        <!-- Enhanced surname input field with icon -->
+        <div class="input-group enhanced-input">
+            <div class="input-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <input type="text" th:field="*{surname}" class="form-control" placeholder="Surname (min 3 characters)" minlength="3" required>
+            <div class="field-error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+        </div>
+        
+        <!-- Enhanced username input field with icon -->
+        <div class="input-group enhanced-input">
+            <div class="input-icon">
+                <i class="fas fa-at"></i>
+            </div>
+            <input type="text" th:field="*{username}" class="form-control" placeholder="Username (min 3 characters)" minlength="3" required>
+            <div class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+        
+        <!-- Enhanced email input field with icon -->
+        <div class="input-group enhanced-input">
+            <div class="input-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <input type="email" th:field="*{email}" class="form-control" placeholder="Enter valid email address" required>
+            <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+        
+        <!-- Enhanced password input field with icon -->
+        <div class="input-group enhanced-input">
+            <div class="input-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Password (min 6 characters)" minlength="6" required>
+            <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </div>
+        
+        <!-- Enhanced birth date input field with icon -->
+        <div class="input-group enhanced-input">
+            <div class="input-icon">
+                <i class="fas fa-birthday-cake"></i>
+            </div>
+            <input type="date" th:field="*{birthDate}" class="form-control" required>
+        </div>
+        
+        <!-- Submit button -->
+        <button type="submit" class="btn-auth">
+            <i class="fas fa-user-plus btn-icon"></i>
+            <span>Create Account</span>
+        </button>
+    </form>
+
+    <!-- Enhanced link to login page with icon -->
+    <a href="/login" class="auth-link">
+        <i class="fas fa-sign-in-alt link-icon"></i>
+        <span>Already have an account? Sign In</span>
+    </a>
+
+</div>
+<!-- Bootstrap JavaScript bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom animations script -->
+<script>
+  // Particle animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const particles = document.querySelectorAll('.particle');
+    particles.forEach((particle, index) => {
+      particle.style.animationDelay = `${index * 0.5}s`;
+    });
+    
+    // Form input focus effects
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      input.addEventListener('blur', function() {
+        this.parentElement.classList.remove('focused');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

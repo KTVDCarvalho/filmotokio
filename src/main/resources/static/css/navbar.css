@@ -1,0 +1,492 @@
+/*
+ * FILMOTOKIO - Navigation Bar Component
+ * Main site navigation with responsive design
+ * Author: Kiniame Carvalho
+ * Version: 1.0
+ * Last Updated: 2026
+ */
+
+/* ===== CSS Variables ===== */
+:root {
+    --navbar-height: 70px;
+    --navbar-bg-gradient: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(26, 26, 26, 0.95) 50%, rgba(20, 20, 20, 0.95) 100%);
+    --navbar-border: 1px solid rgba(255, 255, 255, 0.1);
+    --navbar-shadow: 0 4px 32px rgba(0, 0, 0, 0.3);
+    --navbar-padding: 0 30px;
+    --navbar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --accent-color: #ff6a00;
+    --text-primary: #f0f0f0;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== Navigation Bar ===== */
+.navbar {
+    height: var(--navbar-height);
+    background: var(--navbar-bg-gradient);
+    backdrop-filter: var(--glass-blur);
+    border-bottom: var(--navbar-border);
+    box-shadow: var(--navbar-shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--navbar-padding);
+    position: relative;
+    transition: var(--navbar-transition);
+}
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 106, 0, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.navbar:hover::before {
+    opacity: 1;
+}
+
+/* ===== Navigation Links ===== */
+.nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ===== Navigation Link Styles ===== */
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #d9d9d9;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 106, 0, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.nav-link:hover {
+    color: #ff6a00;
+    background: rgba(255, 106, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 106, 0, 0.2);
+}
+
+.nav-link:hover::before {
+    left: 100%;
+}
+
+.nav-link:active {
+    transform: translateY(-1px);
+    background: rgba(255, 106, 0, 0.15);
+}
+
+/* ===== Navigation Icons ===== */
+.nav-icon {
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover .nav-icon {
+    opacity: 1;
+    color: #ff6a00;
+    transform: scale(1.1);
+}
+
+.nav-link span {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== Logo Styles ===== */
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    cursor: pointer;
+}
+
+.logo::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    width: 4px;
+    height: 4px;
+    background: #ff6a00;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 20px rgba(255, 106, 0, 0.5);
+}
+
+.logo:hover::before {
+    left: -15px;
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(255, 106, 0, 0.8);
+}
+
+/* ===== Logo Accent ===== */
+.logo span {
+    color: #ff6a00;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.logo:hover span {
+    text-shadow: 0 0 15px rgba(255, 106, 0, 0.8);
+    transform: scale(1.02);
+}
+
+/* ===== User Info Section ===== */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ===== Welcome Message ===== */
+.user-info span {
+    color: #f0f0f0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    background: rgba(255, 106, 0, 0.1);
+    border: 1px solid rgba(255, 106, 0, 0.2);
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.user-info span::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.user-info span:hover {
+    background: rgba(255, 106, 0, 0.15);
+    border-color: rgba(255, 106, 0, 0.3);
+    transform: scale(1.02);
+}
+
+.user-info span:hover::before {
+    left: 100%;
+}
+
+.user-info strong {
+    color: #ff6a00;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255, 106, 0, 0.3);
+}
+
+/* ===== Dropdown Trigger Container ===== */
+.dropdown > a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    padding: 4px;
+    border-radius: 8px;
+}
+
+.dropdown > a:hover {
+    background: rgba(255, 106, 0, 0.05);
+}
+
+/* ===== Dropdown Arrow ===== */
+.dropdown-arrow {
+    font-size: 12px;
+    color: #ff6a00;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+}
+
+.dropdown:hover .dropdown-arrow {
+    transform: translateY(2px);
+    opacity: 1;
+    color: #ff8c42;
+}
+
+/* ===== Profile Picture Container ===== */
+.navbar-profile-pic {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid #ff6a00;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 106, 0, 0.1);
+    color: #ff6a00;
+    font-size: 16px;
+    overflow: hidden;
+}
+
+/* ===== Profile Image ===== */
+.navbar-profile-pic .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ===== Default User Icon ===== */
+.navbar-profile-pic .fas.fa-user {
+    font-size: 16px;
+}
+
+/* ===== Profile Picture Hover ===== */
+.navbar-profile-pic:hover {
+    transform: scale(1.1);
+    border-color: #ff8c42;
+    box-shadow: 0 4px 12px rgba(255, 106, 0, 0.4);
+}
+
+/* ===== Dropdown Menu Styling ===== */
+.dropdown-menu {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    padding: 8px 0;
+    min-width: 180px;
+    animation: dropdownFadeIn 0.3s ease-out;
+}
+
+/* ===== Dropdown Item Styling ===== */
+.dropdown-item {
+    color: #f0f0f0;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    margin: 2px 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.dropdown-item i {
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 106, 0, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 106, 0, 0.15);
+    color: #ff6a00;
+    transform: translateX(4px);
+    border-color: rgba(255, 106, 0, 0.3);
+}
+
+.dropdown-item:hover i {
+    opacity: 1;
+    color: #ff6a00;
+}
+
+.dropdown-item:hover::before {
+    left: 100%;
+}
+
+.dropdown-item:active {
+    background: rgba(255, 106, 0, 0.25);
+    color: #ff8c42;
+    transform: translateX(2px);
+}
+
+/* ===== Dropdown Divider Styling ===== */
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 8px 16px;
+    border: none;
+}
+
+/* ===== Dropdown Animation ===== */
+@keyframes dropdownFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Dropdown Trigger Hover Effects ===== */
+.dropdown:hover .navbar-profile-pic {
+    transform: scale(1.05);
+    border-color: #ff6a00;
+    box-shadow: 0 6px 16px rgba(255, 106, 0, 0.5);
+}
+
+/* ===== Form Button in Dropdown ===== */
+.dropdown-item button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdown-item button:hover {
+    background: none;
+    color: inherit;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 15px;
+        height: auto;
+        min-height: 70px;
+        flex-wrap: wrap;
+    }
+    
+    .logo {
+        font-size: 1.4rem;
+        order: 1;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .nav-links {
+        position: static;
+        transform: none;
+        order: 2;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+    
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        gap: 6px;
+    }
+    
+    .nav-icon {
+        font-size: 12px;
+        width: 14px;
+    }
+    
+    .user-info {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+    }
+    
+    .user-info span {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .dropdown-menu {
+        min-width: 160px;
+        font-size: 0.85rem;
+    }
+    
+    .dropdown-item {
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-links {
+        gap: 4px;
+    }
+    
+    .nav-link {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+    
+    .nav-link span {
+        display: none;
+    }
+    
+    .nav-icon {
+        font-size: 14px;
+        width: 16px;
+        margin: 0;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .user-info span {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+    }
+}

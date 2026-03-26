@@ -1,0 +1,344 @@
+<!-- New film creation page template -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New Film - FILMOTOKIO</title>
+
+    <!-- Bootstrap CSS framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+
+<body>
+<!-- Include the navigation bar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Enhanced main film creation form container -->
+<div class="container enhanced-form-container">
+    <!-- Enhanced page header with icon and decoration -->
+    <div class="page-header">
+        <div class="header-content">
+            <div class="title-icon-container">
+                <i class="fas fa-film title-icon"></i>
+            </div>
+            <h2 class="page-title">Register New Film</h2>
+        </div>
+        <div class="header-decoration"></div>
+    </div>
+
+    <!-- Success and error message displays -->
+    <div th:if="${message}" class="alert alert-success enhanced-alert">
+        <i class="fas fa-check-circle alert-icon"></i>
+        <span th:text="${message}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger enhanced-alert">
+        <i class="fas fa-exclamation-triangle alert-icon"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Enhanced film creation form with file upload support -->
+    <form th:action="@{/film/save}" th:object="${film}" method="post" enctype="multipart/form-data" class="enhanced-form">
+        <!-- CSRF filmotokio.security token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!-- Enhanced two-column layout for form fields -->
+        <div class="row g-4 enhanced-grid">
+
+            <!-- Enhanced film title input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-heading label-icon"></i>
+                        Title
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control enhanced-input" th:field="*{title}" placeholder="Enter film title" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced year input with icon -->
+            <div class="col-md-3">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-calendar label-icon"></i>
+                        Year
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" class="form-control enhanced-input" th:field="*{year}" min="1888" max="2100" placeholder="Year" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced duration input with icon -->
+            <div class="col-md-3">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-clock label-icon"></i>
+                        Duration (min)
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" class="form-control enhanced-input" th:field="*{duration}" min="1" placeholder="Minutes" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced synopsis textarea with icon -->
+            <div class="col-12">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-align-left label-icon"></i>
+                        Synopsis
+                    </label>
+                    <div class="textarea-wrapper">
+                        <textarea class="form-control enhanced-textarea" th:field="*{synopsis}" rows="4" placeholder="Enter film synopsis"></textarea>
+                        <div class="input-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced directors selection with icon -->
+            <div class="col-md-4">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-video label-icon"></i>
+                        Directors
+                    </label>
+                    <div class="select-wrapper multi-select-wrapper">
+                        <select class="form-select enhanced-select multi-select" name="directors" multiple size="4">
+                            <option th:each="p, iter : ${directors}" th:value="${p.id}" th:text="${p.name + ' ' + p.surname}"></option>
+                        </select>
+                        <div class="select-hint">
+                            <i class="fas fa-info-circle hint-icon"></i>
+                            <span>Hold Ctrl to select multiple</span>
+                        </div>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced screenwriters selection with icon -->
+            <div class="col-md-4">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-pen label-icon"></i>
+                        Screenwriters
+                    </label>
+                    <div class="select-wrapper multi-select-wrapper">
+                        <select class="form-select enhanced-select multi-select" name="screenwriters" multiple size="4">
+                            <option th:each="p : ${screenwriters}" th:value="${p.id}" th:text="${p.name + ' ' + p.surname}"></option>
+                        </select>
+                        <div class="select-hint">
+                            <i class="fas fa-info-circle hint-icon"></i>
+                            <span>Hold Ctrl to select multiple</span>
+                        </div>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced actors selection with icon -->
+            <div class="col-md-4">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-theater-masks label-icon"></i>
+                        Actors
+                    </label>
+                    <div class="select-wrapper multi-select-wrapper">
+                        <select class="form-select enhanced-select multi-select" name="actors" multiple size="4">
+                            <option th:each="p : ${actors}" th:value="${p.id}" th:text="${p.name + ' ' + p.surname}"></option>
+                        </select>
+                        <div class="select-hint">
+                            <i class="fas fa-info-circle hint-icon"></i>
+                            <span>Hold Ctrl to select multiple</span>
+                        </div>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced musicians selection with icon -->
+            <div class="col-md-4">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-music label-icon"></i>
+                        Musicians
+                    </label>
+                    <div class="select-wrapper multi-select-wrapper">
+                        <select class="form-select enhanced-select multi-select" name="musicians" multiple size="4">
+                            <option th:each="p : ${musicians}" th:value="${p.id}" th:text="${p.name + ' ' + p.surname}"></option>
+                        </select>
+                        <div class="select-hint">
+                            <i class="fas fa-info-circle hint-icon"></i>
+                            <span>Hold Ctrl to select multiple</span>
+                        </div>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced photographers selection with icon -->
+            <div class="col-md-4">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-camera label-icon"></i>
+                        Photographers
+                    </label>
+                    <div class="select-wrapper multi-select-wrapper">
+                        <select class="form-select enhanced-select multi-select" name="photographers" multiple size="4">
+                            <option th:each="p : ${photographers}" th:value="${p.id}" th:text="${p.name + ' ' + p.surname}"></option>
+                        </select>
+                        <div class="select-hint">
+                            <i class="fas fa-info-circle hint-icon"></i>
+                            <span>Hold Ctrl to select multiple</span>
+                        </div>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced poster upload with icon -->
+            <div class="col-12">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-image label-icon"></i>
+                        Poster
+                    </label>
+                    <div class="file-wrapper">
+                        <input type="file" class="form-control enhanced-file" name="posterFile" accept="image/*">
+                        <div class="file-hint">
+                            <i class="fas fa-info-circle hint-icon"></i>
+                            <span>Upload film poster (JPG, PNG, GIF - Max 10MB)</span>
+                        </div>
+                        <div class="input-decoration"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <div class="col-12">
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit enhanced-btn">
+                        <div class="btn-content">
+                            <i class="fas fa-film btn-icon"></i>
+                            <span>Register Film</span>
+                        </div>
+                        <div class="btn-decoration"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Enhanced spacer -->
+<div class="mt-auto enhanced-spacer">
+    <div class="spacer-decoration"></div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+<!-- Bootstrap JavaScript bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Enhanced form interactions script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.enhanced-input');
+        const textareas = document.querySelectorAll('.enhanced-textarea');
+        const selects = document.querySelectorAll('.enhanced-select');
+        const fileInput = document.querySelector('.enhanced-file');
+        const submitBtn = document.querySelector('.enhanced-btn');
+        
+        // Input focus effects
+        [...inputs, ...textareas].forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+        
+        // Select focus effects
+        selects.forEach(select => {
+            select.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            select.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+        
+        // File input focus effects
+        if (fileInput) {
+            fileInput.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            fileInput.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+            
+            // File selection feedback
+            fileInput.addEventListener('change', function() {
+                const fileName = this.files[0]?.name || 'No file selected';
+                const hint = this.parentElement.querySelector('.file-hint span');
+                if (hint) {
+                    hint.textContent = fileName ? `Selected: ${fileName}` : 'Upload film poster (JPG, PNG, GIF - Max 10MB)';
+                }
+            });
+        }
+        
+        // Button hover effects
+        if (submitBtn) {
+            submitBtn.addEventListener('mouseenter', function() {
+                this.querySelector('.btn-decoration').style.width = '100%';
+            });
+            
+            submitBtn.addEventListener('mouseleave', function() {
+                this.querySelector('.btn-decoration').style.width = '0%';
+            });
+            
+            // Form submission animation
+            this.querySelector('form').addEventListener('submit', function() {
+                submitBtn.classList.add('submitting');
+                submitBtn.querySelector('.btn-icon').className = 'fas fa-spinner fa-spin btn-icon';
+            });
+        }
+        
+        // Multi-select visual feedback
+        const multiSelects = document.querySelectorAll('.multi-select');
+        multiSelects.forEach(select => {
+            select.addEventListener('change', function() {
+                const selectedCount = this.selectedOptions.length;
+                const wrapper = this.closest('.multi-select-wrapper');
+                const hint = wrapper.querySelector('.select-hint span');
+                if (hint) {
+                    hint.textContent = selectedCount > 0 ? `${selectedCount} selected` : 'Hold Ctrl to select multiple';
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

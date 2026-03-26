@@ -1,0 +1,165 @@
+<!-- Search results page template -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Results - FILMOTOKIO</title>
+
+  <!-- Bootstrap CSS framework -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Custom CSS stylesheets -->
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/search.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<body>
+
+<!-- Include the navigation bar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Search results section -->
+<div class="container-results enhanced-results-container" th:if="${films != null}">
+  <!-- Page header -->
+  <div class="results-header">
+    <div class="header-content">
+      <div class="title-icon-container">
+        <i class="fas fa-search results-icon"></i>
+      </div>
+      <h2 class="results-title">Search Results</h2>
+    </div>
+    <div class="results-count" th:if="${!#lists.isEmpty(films)}">
+      <span class="count-text">Found</span>
+      <span class="count-number" th:text="${#lists.size(films)}">0</span>
+      <span class="count-text" th:text="${#lists.size(films) == 1 ? 'film' : 'films'}">films</span>
+    </div>
+  </div>
+
+  <!-- Message when no films found -->
+  <div th:if="${#lists.isEmpty(films)}" class="no-results">
+    <div class="no-results-content">
+      <div class="no-results-icon-container">
+        <i class="fas fa-film no-results-icon"></i>
+      </div>
+      <h3 class="no-results-title">No Films Found</h3>
+      <p class="no-results-text">Try searching with different keywords or check your spelling.</p>
+      <a href="/film/search" class="btn-back-to-search">
+        <i class="fas fa-arrow-left btn-icon"></i>
+        <span>Back to Search</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Grid layout for search results -->
+  <div class="row g-4 enhanced-grid" th:if="${!#lists.isEmpty(films)}">
+    <!-- Loop through each film in search results -->
+    <div class="col-md-4" th:each="film : ${films}">
+      <div class="card-film h-100 enhanced-film-card">
+        <!-- Film poster image -->
+        <div class="poster-wrapper">
+          <img th:src="${film.poster != null ? film.poster : '/images/default-poster.svg'}" 
+               class="img-fluid film-poster enhanced-poster"
+               alt="Film Poster">
+          <!-- Poster overlay with hover effect -->
+          <div class="poster-overlay">
+            <div class="overlay-content">
+              <i class="fas fa-play-circle overlay-icon"></i>
+              <span class="overlay-text">View Details</span>
+            </div>
+          </div>
+        </div>
+        <!-- Enhanced film information card body -->
+        <div class="card-body enhanced-card-body">
+          <!-- Enhanced film title with icon -->
+          <div class="film-title-section">
+            <i class="fas fa-film title-icon"></i>
+            <h5 th:text="${film.title}">Film Title</h5>
+          </div>
+          
+          <!-- Enhanced film details with icons -->
+          <div class="film-meta">
+            <div class="meta-item">
+              <i class="fas fa-calendar meta-icon"></i>
+              <span th:text="${film.year}">2024</span>
+            </div>
+            <div class="meta-divider">•</div>
+            <div class="meta-item">
+              <i class="fas fa-clock meta-icon"></i>
+              <span th:text="${film.duration}">120</span>
+              <span class="meta-unit">min</span>
+            </div>
+          </div>
+          
+          <!-- Enhanced star rating display -->
+          <div class="stars-container mb-3" th:if="${filmAverages != null and filmAverages[film.id] != null}">
+            <div class="stars-label">
+              <i class="fas fa-star stars-icon"></i>
+              <span>Rating</span>
+            </div>
+            <div class="stars">
+              <span th:each="i : ${#numbers.sequence(1,5)}"
+                    th:classappend="${T(filmotokio.util.StarRatingUtil).getStarClass(filmAverages[film.id], i)}"
+                    class="avg-star">
+                &#9733;
+              </span>
+              <span class="avg-number" th:text="${#numbers.formatDecimal(filmAverages[film.id],1,1)}">0</span>
+            </div>
+          </div>
+          
+          <!-- Enhanced synopsis -->
+          <div class="synopsis-section">
+            <p class="synopsis-text" th:text="${film.synopsis}">Film synopsis goes here...</p>
+          </div>
+          
+          <!-- Enhanced view film button -->
+          <a th:href="@{/films/{id}(id=${film.id})}" class="btn btn-view enhanced-view-btn w-100">
+            <i class="fas fa-eye btn-icon"></i>
+            <span>View Film</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Enhanced spacer -->
+<div class="mt-auto enhanced-spacer">
+  <div class="spacer-decoration"></div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+<!-- Bootstrap JavaScript bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Enhanced search results interactions -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Poster overlay hover effects
+    const posterWrappers = document.querySelectorAll('.poster-wrapper');
+    posterWrappers.forEach(wrapper => {
+      wrapper.addEventListener('mouseenter', function() {
+        this.querySelector('.poster-overlay').style.opacity = '1';
+      });
+      wrapper.addEventListener('mouseleave', function() {
+        this.querySelector('.poster-overlay').style.opacity = '0';
+      });
+    });
+    
+    // Card hover animations
+    const filmCards = document.querySelectorAll('.enhanced-film-card');
+    filmCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.classList.add('fade-in-up');
+    });
+  });
+</script>
+
+</body>
+</html>

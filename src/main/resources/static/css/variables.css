@@ -1,0 +1,160 @@
+/*
+ * FILMOTOKIO - Global CSS Variables
+ * Design system variables for consistent styling
+ * Author: Kiniame Carvalho
+ * Version: 1.0
+ * Last Updated: 2026
+ */
+
+/* ===== Design System Variables ===== */
+:root {
+    /* ===== Colors ===== */
+    --primary-color: #ff6a00;
+    --primary-dark: #e55a00;
+    --primary-light: #ff8c42;
+    --text-primary: #f0f0f0;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --bg-dark: #0a0a0a;
+    --bg-medium: #1a1a1a;
+    --bg-light: #2d2d2d;
+    --error-color: #ff6b6b;
+    --success-color: #4caf50;
+    --warning-color: #ffa726;
+
+    /* ===== Gradients ===== */
+    --primary-gradient: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(26, 26, 26, 0.95) 50%, rgba(20, 20, 20, 0.95) 100%);
+    --accent-gradient: linear-gradient(135deg, #ff6a00 0%, #ff8c42 100%);
+    --error-gradient: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    --success-gradient: linear-gradient(135deg, #4caf50, #66bb6a);
+
+    /* ===== Glass Effects ===== */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(20px);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+
+    /* ===== Layout ===== */
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-xxl: 24px;
+
+    /* ===== Spacing ===== */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+
+    /* ===== Typography ===== */
+    --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+
+    /* ===== Transitions ===== */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.6s ease-out;
+
+    /* ===== Animations ===== */
+    --fade-in-up: fadeInUp 0.6s ease-out;
+    --fade-in: fadeIn 0.4s ease-out;
+    --slide-in-down: slideInDown 0.4s ease-out;
+
+    /* ===== Components ===== */
+    --navbar-height: 70px;
+    --navbar-padding: 0 30px;
+    --container-max-width: 1400px;
+    --card-max-width: 450px;
+    --form-max-width: 1000px;
+    --search-max-width: 800px;
+
+    /* ===== Z-index ===== */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+}
+
+/* ===== Global Keyframes ===== */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes slideInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== Global Utility Classes ===== */
+.glass-card {
+    background: var(--primary-gradient);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--glass-shadow);
+}
+
+.text-gradient {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Legacy Deprecation Notices ===== */
+.legacy-notice {
+    border-left: 4px solid var(--warning-color);
+    background: rgba(255, 167, 38, 0.1);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    border-radius: var(--border-radius-sm);
+    color: var(--warning-color);
+    font-size: var(--font-size-sm);
+}
+
+.legacy-notice::before {
+    content: "⚠️ LEGACY: ";
+    font-weight: bold;
+}

@@ -1,0 +1,142 @@
+<!-- Film search page template -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Search Film - FILMOTOKIO</title>
+
+    <!-- Bootstrap CSS framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/search.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+
+<body>
+
+<!-- Include the navigation bar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Search form section -->
+<div class="container-form enhanced-search-container">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="header-content">
+            <div class="title-icon-container">
+                <i class="fas fa-search title-icon"></i>
+            </div>
+            <h2 class="page-title">Search Film</h2>
+        </div>
+        <div class="header-decoration"></div>
+    </div>
+    
+    <!-- Film search form -->
+    <form th:action="@{/film/search-results}" method="get" class="search-form enhanced-form">
+        <div class="search-input-group">
+            <div class="input-icon-container">
+                <i class="fas fa-film input-icon"></i>
+            </div>
+            <input type="text" class="form-control enhanced-input" id="title" name="title" placeholder="Enter film keyword" required>
+            <div class="input-decoration"></div>
+        </div>
+        
+        <!-- Search button -->
+        <button type="submit" class="btn-search enhanced-btn">
+            <div class="btn-content">
+                <i class="fas fa-search btn-icon"></i>
+                <span>Search</span>
+            </div>
+            <div class="btn-decoration"></div>
+        </button>
+    </form>
+    
+    <!-- Search suggestions or tips -->
+    <div class="search-tips">
+        <div class="tips-header">
+            <i class="fas fa-lightbulb tips-icon"></i>
+            <span>Search Tips</span>
+        </div>
+        <ul class="tips-list">
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Search by film title, actor, or director</span>
+            </li>
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Use partial names for broader results</span>
+            </li>
+            <li class="tip-item">
+                <i class="fas fa-check tip-icon"></i>
+                <span>Try different keywords if no results found</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Spacer to push footer to bottom -->
+<div class="mt-auto enhanced-spacer">
+    <div class="spacer-decoration"></div>
+</div>
+
+<!-- Include the footer fragment -->
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+<!-- Bootstrap JavaScript bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Search interactions script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('.enhanced-input');
+        const searchForm = document.querySelector('.search-form');
+        const searchBtn = document.querySelector('.enhanced-btn');
+        
+        // Input focus effects
+        searchInput.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+            searchForm.classList.add('input-focused');
+        });
+        
+        searchInput.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+            searchForm.classList.remove('input-focused');
+        });
+        
+        // Button hover effects
+        searchBtn.addEventListener('mouseenter', function() {
+            this.querySelector('.btn-decoration').style.width = '100%';
+        });
+        
+        searchBtn.addEventListener('mouseleave', function() {
+            this.querySelector('.btn-decoration').style.width = '0%';
+        });
+        
+        // Form submission animation
+        searchForm.addEventListener('submit', function() {
+            searchBtn.classList.add('submitting');
+            searchBtn.querySelector('.btn-icon').className = 'fas fa-spinner fa-spin btn-icon';
+        });
+        
+        // Search input typing animation
+        let typingTimer;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            this.parentElement.classList.add('typing');
+            
+            typingTimer = setTimeout(() => {
+                this.parentElement.classList.remove('typing');
+            }, 500);
+        });
+    });
+</script>
+
+</body>
+</html>

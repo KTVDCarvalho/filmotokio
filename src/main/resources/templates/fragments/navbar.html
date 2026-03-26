@@ -1,0 +1,85 @@
+<!-- Navigation bar fragment - included in all pages -->
+<nav th:fragment="navbar" class="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <!-- Application logo/brand -->
+    <div class="logo">FILMO<span>TOKIO</span></div>
+
+    <!-- Main navigation links -->
+    <div class="nav-links">
+        <a href="/" class="nav-link">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <!-- Link to create new film - only visible to authenticated users -->
+        <a href="/film/new" sec:authorize="isAuthenticated()" class="nav-link">
+            <i class="fas fa-film nav-icon"></i>
+            <span>New Film</span>
+        </a>
+        <a href="/film/search" class="nav-link">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search Film</span>
+        </a>
+
+        <!-- Link to create new person - only visible to authenticated users -->
+        <a href="/person/new" sec:authorize="isAuthenticated()" class="nav-link">
+            <i class="fas fa-user-plus nav-icon"></i>
+            <span>Create Person</span>
+        </a>
+        <!-- Link to create new user - only visible to admin users -->
+        <a href="/admin/user/new" sec:authorize="hasRole('ADMIN')" class="nav-link">
+            <i class="fas fa-user-shield nav-icon"></i>
+            <span>Create User</span>
+        </a>
+        <!-- Login link - only visible to non-authenticated users -->
+        <a href="/login" sec:authorize="isAnonymous()" class="nav-link">
+            <i class="fas fa-sign-in-alt nav-icon"></i>
+            <span>Login</span>
+        </a>
+    </div>
+
+    <!-- User information section - only visible to authenticated users -->
+    <div class="user-info" sec:authorize="isAuthenticated()">
+        <!-- Welcome message with username -->
+        <span>Hello, <strong sec:authentication="name"></strong></span>
+
+        <!-- User profile dropdown menu -->
+        <div class="dropdown">
+            <a href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="navbar-profile-pic">
+                    <!-- User profile picture if available -->
+                    <img th:if="${#authentication.name != null and @userRepository.findByUsername(#authentication.name).orElse(null) != null and @userRepository.findByUsername(#authentication.name).orElse(null).image != null}" 
+                         th:src="${@userRepository.findByUsername(#authentication.name).orElse(null).image}" 
+                         alt="Profile" class="profile-img">
+                    <!-- Default user icon if no profile picture -->
+                    <i th:unless="${#authentication.name != null and @userRepository.findByUsername(#authentication.name).orElse(null) != null and @userRepository.findByUsername(#authentication.name).orElse(null).image != null}" 
+                       class="fas fa-user"></i>
+                </div>
+                <!-- Dropdown arrow indicator -->
+                <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </a>
+
+            <!-- Dropdown menu items -->
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                <!-- Link to user profile page -->
+                <li><a class="dropdown-item" th:href="@{/profile}">
+                    <i class="fas fa-user-circle me-2"></i>Profile
+                </a></li>
+                <!-- Link to migration page - only visible to admin users -->
+                <li><a class="dropdown-item" th:href="@{/admin/migration}" sec:authorize="hasRole('ADMIN')">
+                    <i class="fas fa-database me-2"></i>Migrate
+                </a></li>
+                <!-- Divider line -->
+                <li><hr class="dropdown-divider"></li>
+                <!-- Logout form -->
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <button class="dropdown-item" type="submit">
+                            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>

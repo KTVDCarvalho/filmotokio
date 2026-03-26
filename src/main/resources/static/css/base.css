@@ -1,0 +1,42 @@
+/* ===== CSS BASE - GLOBAL SITE STYLES ===== */
+
+/* ===== Body e Layout ===== */
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+}
+
+/* ===== Legacy Footer Styles (overridden by enhanced footer.css) ===== */
+/* Note: Footer styles are now in footer.css */
+/* These legacy styles are kept for backward compatibility but have lower specificity */
+footer {
+    margin-top: auto;
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 32px 20px;
+    text-align: center;
+    color: #bbb;
+    font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+footer .social-links a {
+    color: #bbb;
+    margin: 0 12px;
+    font-size: 1.2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+}
+
+footer .social-links a:hover {
+    color: #fff;
+    transform: scale(1.15);
+    opacity: 1;
+}

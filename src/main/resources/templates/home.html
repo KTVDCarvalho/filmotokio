@@ -1,0 +1,276 @@
+<!-- Home page template -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FILMOTOKIO</title>
+
+    <!-- Bootstrap CSS framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+
+<body>
+
+<!-- Include the navigation bar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Enhanced main content section for displaying films -->
+<div class="enhanced-home-container">
+    <!-- Enhanced page header with animated icon and decoration -->
+    <div class="page-header enhanced-header">
+        <div class="header-content">
+            <div class="title-icon-container">
+                <i class="fas fa-film title-icon"></i>
+            </div>
+            <div class="header-text">
+                <h1 class="page-title">Featured Films</h1>
+                <p class="page-subtitle">Discover the latest and greatest films</p>
+            </div>
+        </div>
+        <div class="header-decoration"></div>
+        <div class="header-background-effects">
+            <div class="header-circle header-circle-1"></div>
+            <div class="header-circle header-circle-2"></div>
+            <div class="header-circle header-circle-3"></div>
+        </div>
+    </div>
+
+    <!-- Enhanced grid layout for film cards -->
+    <div class="films-grid enhanced-grid">
+        <!-- Loop through each film and create a card -->
+        <div class="film-card-wrapper enhanced-wrapper" th:each="film : ${films}">
+            <div class="film-card enhanced-film-card">
+                <!-- Enhanced film poster container with overlay -->
+                <div class="film-poster-container enhanced-poster-container">
+                    <img th:src="${film.poster != null ? film.poster : '/images/default-poster.svg'}"
+                         class="film-poster enhanced-poster"
+                         alt="Film Poster"/>
+                    <!-- Enhanced poster overlay with hover effect -->
+                    <div class="poster-overlay enhanced-overlay">
+                        <div class="overlay-content enhanced-overlay-content">
+                            <div class="play-icon-container">
+                                <i class="fas fa-play-circle play-icon enhanced-play-icon"></i>
+                            </div>
+                            <span class="overlay-text enhanced-overlay-text">View Details</span>
+                        </div>
+                    </div>
+                    <!-- Film rating badge on poster -->
+                    <div class="poster-rating-badge">
+                        <i class="fas fa-star badge-icon"></i>
+                        <span class="badge-rating" th:text="${#numbers.formatDecimal(filmAverages[film.id],1,1)}">0.0</span>
+                    </div>
+                </div>
+
+                <!-- Enhanced film information section -->
+                <div class="film-body enhanced-film-body">
+                    <!-- Enhanced film title with icon -->
+                    <div class="film-title-section enhanced-title-section">
+                        <div class="title-icon-wrapper">
+                            <i class="fas fa-video title-icon enhanced-title-icon"></i>
+                        </div>
+                        <h3 class="film-title enhanced-film-title" th:text="${film.title}">Film Title</h3>
+                    </div>
+
+                    <!-- Enhanced film details (year and duration) -->
+                    <div class="film-meta enhanced-meta">
+                        <div class="meta-item enhanced-meta-item">
+                            <i class="fas fa-calendar meta-icon enhanced-meta-icon"></i>
+                            <span th:text="${film.year}">2024</span>
+                        </div>
+                        <div class="meta-divider enhanced-divider">•</div>
+                        <div class="meta-item enhanced-meta-item">
+                            <i class="fas fa-clock meta-icon enhanced-meta-icon"></i>
+                            <span th:text="${film.duration}">120</span>
+                            <span class="meta-unit enhanced-unit">min</span>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced star rating display -->
+                    <div class="rating-section enhanced-rating-section">
+                        <div class="rating-header">
+                            <i class="fas fa-star rating-header-icon"></i>
+                            <span>Rating</span>
+                        </div>
+                        <div class="stars-container enhanced-stars-container">
+                            <!-- Generate 5 stars with appropriate classes based on rating -->
+                            <span th:each="i : ${#numbers.sequence(1,5)}"
+                                  th:classappend="${T(filmotokio.util.StarRatingUtil).getStarClass(filmAverages[film.id], i)}"
+                                  class="star enhanced-star">
+                                &#9733;
+                            </span>
+                        </div>
+                        <!-- Display numeric rating -->
+                        <div class="rating-value enhanced-rating-value">
+                            <i class="fas fa-star rating-icon enhanced-rating-icon"></i>
+                            <span class="avg-number enhanced-avg-number" th:text="${#numbers.formatDecimal(filmAverages[film.id],1,1)}">0.0</span>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced action button -->
+                    <div class="action-section enhanced-action-section">
+                        <a th:href="@{/films/{id}(id=${film.id})}" class="btn-action enhanced-btn-action">
+                            <div class="btn-content">
+                                <i class="fas fa-eye btn-icon enhanced-btn-icon"></i>
+                                <span>View Film</span>
+                            </div>
+                            <div class="btn-decoration"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enhanced loading state for empty state -->
+    <div th:if="${#lists.isEmpty(films)}" class="empty-state enhanced-empty-state">
+        <div class="empty-content">
+            <div class="empty-icon-container">
+                <i class="fas fa-film empty-icon"></i>
+            </div>
+            <h3 class="empty-title">No Films Available</h3>
+            <p class="empty-text">Check back later for new featured films!</p>
+            <a href="/film/search" class="btn-search-films enhanced-btn-secondary">
+                <i class="fas fa-search btn-icon"></i>
+                <span>Browse Films</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced spacer -->
+<div class="mt-auto enhanced-spacer">
+    <div class="spacer-decoration"></div>
+</div>
+
+<!-- Include the footer fragment -->
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+<!-- Bootstrap JavaScript bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Enhanced home page interactions -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate header elements on load
+        const header = document.querySelector('.enhanced-header');
+        const filmCards = document.querySelectorAll('.enhanced-film-card');
+        const headerCircles = document.querySelectorAll('.header-circle');
+        
+        // Animate header appearance
+        if (header) {
+            header.style.opacity = '0';
+            header.style.transform = 'translateY(-30px)';
+            
+            setTimeout(() => {
+                header.style.transition = 'all 0.8s ease-out';
+                header.style.opacity = '1';
+                header.style.transform = 'translateY(0)';
+            }, 100);
+        }
+        
+        // Animate background circles
+        headerCircles.forEach((circle, index) => {
+            circle.style.animation = `float ${4 + index}s ease-in-out infinite`;
+        });
+        
+        // Animate film cards with staggered delay
+        filmCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px) scale(0.95)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0) scale(1)';
+            }, 300 + (index * 150));
+        });
+        
+        // Enhanced poster overlay hover effects
+        const posterContainers = document.querySelectorAll('.enhanced-poster-container');
+        posterContainers.forEach(container => {
+            const overlay = container.querySelector('.enhanced-overlay');
+            const playIcon = container.querySelector('.enhanced-play-icon');
+            
+            container.addEventListener('mouseenter', function() {
+                overlay.style.opacity = '1';
+                playIcon.style.transform = 'scale(1.2)';
+            });
+            
+            container.addEventListener('mouseleave', function() {
+                overlay.style.opacity = '0';
+                playIcon.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Enhanced button hover effects
+        const actionButtons = document.querySelectorAll('.enhanced-btn-action');
+        actionButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.querySelector('.btn-decoration').style.width = '100%';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.querySelector('.btn-decoration').style.width = '0%';
+            });
+        });
+        
+        // Star rating hover animation
+        const starContainers = document.querySelectorAll('.enhanced-stars-container');
+        starContainers.forEach(container => {
+            const stars = container.querySelectorAll('.enhanced-star');
+            
+            container.addEventListener('mouseenter', function() {
+                stars.forEach((star, index) => {
+                    setTimeout(() => {
+                        star.style.transform = 'scale(1.2)';
+                    }, index * 50);
+                });
+            });
+            
+            container.addEventListener('mouseleave', function() {
+                stars.forEach(star => {
+                    star.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        // Parallax effect on scroll
+        let ticking = false;
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.header-circle');
+            
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.1);
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+            
+            ticking = false;
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', requestTick);
+    });
+</script>
+
+</body>
+</html>

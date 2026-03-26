@@ -1,0 +1,350 @@
+<!-- Admin user registration page template -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register User - FILMOTOKIO</title>
+    
+    <!-- Bootstrap CSS framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Include the navigation bar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Enhanced main registration form container -->
+<div class="container enhanced-form-container">
+    <!-- Enhanced page header with icon and decoration -->
+    <div class="page-header">
+        <div class="header-content">
+            <div class="title-icon-container">
+                <i class="fas fa-user-plus title-icon"></i>
+            </div>
+            <h2 class="page-title">Register New User</h2>
+        </div>
+        <div class="header-decoration"></div>
+    </div>
+
+    <!-- Success and error message displays -->
+    <div th:if="${successMessage}" class="alert alert-success enhanced-alert">
+        <i class="fas fa-check-circle alert-icon"></i>
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger enhanced-alert">
+        <i class="fas fa-exclamation-triangle alert-icon"></i>
+        <span th:text="${errorMessage}"></span>
+    </div>
+    
+    <!-- Enhanced validation errors display -->
+    <div th:if="${bindingResult != null and bindingResult.hasErrors()}" class="enhanced-validation-errors">
+        <div class="validation-header">
+            <i class="fas fa-exclamation-circle validation-icon"></i>
+            <span>Validation errors:</span>
+        </div>
+        <ul class="validation-list">
+            <!-- List validation errors -->
+            <li th:each="error : ${bindingResult.allErrors}" class="validation-item">
+                <i class="fas fa-times-circle error-item-icon"></i>
+                <span th:text="${error.defaultMessage}"></span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Registration requirements reminder -->
+    <div class="requirements-reminder">
+        <div class="reminder-header">
+            <i class="fas fa-info-circle reminder-icon"></i>
+            <span>User Registration Requirements</span>
+        </div>
+        <ul class="requirements-list">
+            <li><i class="fas fa-check requirement-icon"></i> Name and Surname: required fields</li>
+            <li><i class="fas fa-check requirement-icon"></i> Username: minimum 3 characters</li>
+            <li><i class="fas fa-check requirement-icon"></i> Email: must be a valid email address</li>
+            <li><i class="fas fa-check requirement-icon"></i> Password: secure password recommended</li>
+            <li><i class="fas fa-check requirement-icon"></i> Birth Date: required for age verification</li>
+            <li><i class="fas fa-check requirement-icon"></i> Role: select appropriate user role</li>
+            <li><i class="fas fa-check requirement-icon"></i> Active Status: enable/disable account access</li>
+        </ul>
+    </div>
+    
+    <!-- Enhanced user registration form -->
+    <form th:action="@{/admin/user/new}" method="post" th:object="${user}" class="enhanced-form">
+        <!-- CSRF filmotokio.security token -->
+        <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        
+        <!-- Enhanced form layout with two columns -->
+        <div class="row g-4 enhanced-grid">
+            <!-- Enhanced name input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-user label-icon"></i>
+                        Name
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control enhanced-input" th:field="*{name}" placeholder="Enter user name" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                    <div class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+            </div>
+            
+            <!-- Enhanced surname input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-user label-icon"></i>
+                        Surname
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control enhanced-input" th:field="*{surname}" placeholder="Enter user surname" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                    <div class="field-error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+                </div>
+            </div>
+            
+            <!-- Enhanced username input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-at label-icon"></i>
+                        Username
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control enhanced-input" th:field="*{username}" placeholder="Enter username (min 3 chars)" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle hint-icon"></i>
+                        <span>Minimum 3 characters</span>
+                    </div>
+                    <div class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                </div>
+            </div>
+            
+            <!-- Enhanced email input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-envelope label-icon"></i>
+                        Email
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="email" class="form-control enhanced-input" th:field="*{email}" placeholder="Enter valid email address" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle hint-icon"></i>
+                        <span>Please enter a valid email address</span>
+                    </div>
+                    <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+            </div>
+            
+            <!-- Enhanced password input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-lock label-icon"></i>
+                        Password
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-control enhanced-input" th:field="*{password}" placeholder="Enter password (min 6 chars)" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle hint-icon"></i>
+                        <span>Minimum 6 characters</span>
+                    </div>
+                    <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                </div>
+            </div>
+            
+            <!-- Enhanced birth date input with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-calendar label-icon"></i>
+                        Birth Date
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="date" class="form-control enhanced-input enhanced-date" th:field="*{birthDate}" 
+                               th:attr="max=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required>
+                        <div class="input-decoration"></div>
+                    </div>
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle hint-icon"></i>
+                        <span>Format: YYYY-MM-DD</span>
+                    </div>
+                    <div class="field-error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
+                </div>
+            </div>
+            
+            <!-- Enhanced active status selection with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-toggle-on label-icon"></i>
+                        Active Status
+                    </label>
+                    <div class="select-wrapper">
+                        <select class="form-select enhanced-select" th:field="*{active}" required>
+                            <option th:value="true">Active</option>
+                            <option th:value="false">Inactive</option>
+                        </select>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Enhanced role selection with icon -->
+            <div class="col-md-6">
+                <div class="form-group enhanced-input-group">
+                    <label class="form-label enhanced-label">
+                        <i class="fas fa-user-shield label-icon"></i>
+                        User Role
+                    </label>
+                    <div class="select-wrapper">
+                        <select class="form-select enhanced-select" th:field="*{role}" required>
+                            <option th:value="USER">User</option>
+                            <option th:value="ADMIN">Administrator</option>
+                        </select>
+                        <div class="select-decoration"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit button -->
+        <div class="form-actions">
+            <button type="submit" class="btn-submit enhanced-btn">
+                <div class="btn-content">
+                    <i class="fas fa-user-plus btn-icon"></i>
+                    <span>Register User</span>
+                </div>
+                <div class="btn-decoration"></div>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Enhanced spacer -->
+<div class="mt-auto enhanced-spacer">
+    <div class="spacer-decoration"></div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+<!-- Bootstrap JavaScript bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Enhanced form interactions script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.enhanced-input');
+        const selects = document.querySelectorAll('.enhanced-select');
+        const submitBtn = document.querySelector('.enhanced-btn');
+        
+        // Input focus effects
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+        
+        // Select focus effects
+        selects.forEach(select => {
+            select.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            select.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+        
+        // Button hover effects
+        if (submitBtn) {
+            submitBtn.addEventListener('mouseenter', function() {
+                this.querySelector('.btn-decoration').style.width = '100%';
+            });
+            
+            submitBtn.addEventListener('mouseleave', function() {
+                this.querySelector('.btn-decoration').style.width = '0%';
+            });
+            
+            // Form submission animation
+            this.querySelector('form').addEventListener('submit', function() {
+                submitBtn.classList.add('submitting');
+                submitBtn.querySelector('.btn-icon').className = 'fas fa-spinner fa-spin btn-icon';
+            });
+        }
+        
+        // Enhanced date input styling
+        const dateInput = document.querySelector('.enhanced-date');
+        if (dateInput) {
+            // Add custom styling for date input
+            dateInput.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            dateInput.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        }
+        
+        // Form validation visual feedback
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const fields = form.querySelectorAll('.enhanced-input, .enhanced-select');
+                let isValid = true;
+                
+                fields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.classList.add('error');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('error');
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    // Show error message
+                    const errorContainer = document.querySelector('.enhanced-validation-errors');
+                    if (!errorContainer) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'enhanced-validation-errors';
+                        errorDiv.innerHTML = `
+                            <div class="validation-header">
+                                <i class="fas fa-exclamation-circle validation-icon"></i>
+                                <span>Please fill in all required fields</span>
+                            </div>
+                        `;
+                        form.insertBefore(errorDiv, form.firstChild);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
