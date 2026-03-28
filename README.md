@@ -5,34 +5,56 @@
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 [![Database](https://img.shields.io/badge/Database-H2-00ADD8?style=for-the-badge&logo=h2)](https://www.h2database.com/)
 
-**FILMOTOKIO** is a full-stack web application for movie database management, developed with Java 17 and Spring Boot 2.7.18. This platform demonstrates fundamental web development practices with a responsive interface for managing films, artists, reviews, and users.
+**FILMOTOKIO** is a comprehensive full-stack web application for movie database management, developed as the final project for the Spring Boot Framework Specialization at Tokio School. This platform demonstrates advanced web development practices with a responsive interface for managing films, artists, reviews, and users.
 
-## Key Features
+## Overview
 
-### **Movie Management**
-- Film catalog with poster uploads and metadata
-- Basic search functionality by title
-- 5-star rating system for films
-- Review system with user comments
-- Film deletion (admin only)
+The Filmotokio project represents the culmination of advanced Spring Boot studies, showcasing enterprise-level development capabilities through a practical movie management system. The application implements modern architectural patterns, security best practices, and responsive design principles.
 
-### **User Management**
-- User authentication and registration
-- User profiles with photo uploads
-- Role-based access (USER/ADMIN)
-- Admin panel for user management
+## Technology Stack
 
-### **Artist Management**
-- Artist registration (Actors, Directors, Screenwriters, Musicians, Photographers)
-- Film association with multiple artists
-- Artist categorization by role
+### Backend Technologies
+- **Java 17** - Modern Java with enhanced features and performance improvements
+- **Spring Boot 2.7.18** - Enterprise application framework with auto-configuration
+- **Spring Data JPA** - Database abstraction layer with repository pattern
+- **Spring Security** - Comprehensive authentication and authorization framework
+- **Spring Batch** - Enterprise-grade batch processing for data migration
+- **H2 Database** - File-based persistence with web console support
+- **Maven** - Dependency management and build automation
 
-### **Technical Features**
-- **H2 Database** with file-based persistence
-- Spring Security with BCrypt encryption
-- Responsive design with Bootstrap
-- Spring Batch for data migration
-- File upload handling for posters and profiles
+### Frontend Technologies
+- **Thymeleaf** - Modern server-side templating engine
+- **HTML5 & CSS3** - Latest web standards with semantic markup
+- **Bootstrap 5.3.2** - Responsive UI framework with mobile-first approach
+- **Font Awesome 6.5.1** - Comprehensive icon library
+- **JavaScript** - Interactive functionality and dynamic behavior
+
+## Core Features
+
+### Movie Management
+- Film catalog with poster uploads and comprehensive metadata
+- Basic search functionality by title with real-time filtering
+- 5-star rating system with visual feedback
+- Review system with user comments and moderation
+- Film deletion capabilities (admin only)
+
+### User Management
+- Secure user authentication and registration system
+- User profiles with photo upload capabilities
+- Role-based access control (USER/ADMIN roles)
+- Administrative panel for comprehensive user management
+
+### Artist Management
+- Multi-type artist registration (Actors, Directors, Screenwriters, Musicians, Photographers)
+- Film association with multiple artists through many-to-many relationships
+- Artist categorization and filtering by professional role
+
+### Technical Features
+- **H2 Database** with file-based persistence for development
+- Spring Security with BCrypt encryption for password security
+- Responsive design using Bootstrap framework
+- Spring Batch integration for data migration and export
+- Comprehensive file upload handling for posters and profile images
 
 ## Project Showcase
 
@@ -190,38 +212,26 @@ Film deletion interface available to administrators.
 ```
 filmotokio/
 ├── src/main/java/filmotokio/
-│   ├── controller/          # REST controllers and web endpoints
-│   ├── model/              # JPA entities (Film, Person, User, Review)
+│   ├── controller/          # REST controllers
+│   ├── domain/              # JPA entities (Film, Person, User, Review)
+│   ├── dto/                 # Data Transfer Objects
 │   ├── repository/         # Spring Data repositories
 │   ├── service/            # Business logic services
-│   ├── util/               # Utility classes (StarRatingUtil, etc.)
-│   └── config/             # Security and configuration
+│   ├── security/           # Security configurations
+│   ├── batch/              # Spring Batch configuration
+│   ├── util/               # Utility classes
+│   └── config/             # Application configurations
 ├── src/main/resources/
 │   ├── templates/          # Thymeleaf HTML templates
 │   │   ├── fragments/      # Reusable template fragments
-│   │   │   ├── footer.html # Enhanced footer with GitHub link
-│   │   │   └── navbar.html # Navigation component
 │   │   ├── admin/          # Admin panel pages
 │   │   └── *.html          # Main application pages
 │   └── static/
-│       ├── css/            # NEW: Professional CSS architecture
-│       │   ├── variables.css    # Design system and CSS variables
-│       │   ├── globals.css      # Global styles and utilities
-│       │   ├── legacy.css       # NEW: Organized deprecated styles
-│       │   ├── auth.css         # UPDATED: Enhanced with variables
-│       │   ├── navbar.css       # UPDATED: Professional documentation
-│       │   ├── profile.css      # UPDATED: Enhanced with design system
-│       │   ├── home.css         # Home page styles
-│       │   ├── search.css       # Search functionality
-│       │   ├── film.css         # Individual film pages
-│       │   ├── form.css         # Enhanced form components
-│       │   ├── footer.css       # Site footer
-│       │   ├── error.css        # Error pages
-│       │   ├── migration.css    # Data migration interface
-│       │   └── README.md        # NEW: CSS architecture documentation
+│       ├── css/            # Professional CSS architecture
 │       ├── js/             # JavaScript files
 │       └── images/         # Static images
 ├── uploads/                # User uploaded content
+├── data/                   # H2 database files
 ├── pom.xml                 # Maven configuration
 ├── LICENSE                 # MIT License
 └── README.md              # This file
