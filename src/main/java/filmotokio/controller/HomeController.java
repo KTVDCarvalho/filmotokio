@@ -44,6 +44,6 @@ public class HomeController {
         model.addAttribute("films", films);
         model.addAttribute("filmAverages", filmAverages);
 
-        return "home";
+        return "index";
     }
 }
