@@ -18,12 +18,12 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-    // JWT secret key from application properties
-    @Value("${jwt.secret}")
+    // JWT secret key com um fallback seguro de mais de 32 caracteres caso não esteja configurado no Render
+    @Value("${jwt.secret:MinhaChaveSecretaSuperSeguraComMaisDe32Caracteres}")
     private String secret;
 
-    // JWT expiration time in milliseconds from application properties
-    @Value("${jwt.expiration}")
+    // JWT expiration time com um fallback de 5 horas (18000000 milissegundos)
+    @Value("${jwt.expiration:18000000}")
     private Long expiration;
 
     // Create the signing key for JWT token validation
