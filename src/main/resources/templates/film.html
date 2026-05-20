@@ -1,4 +1,3 @@
-<!-- Film details page template -->
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
@@ -6,31 +5,24 @@
 
 <head>
     <meta charset="UTF-8">
-    <!-- Dynamic page title with film name -->
     <title th:text="${film.title} + ' - FILMOTOKIO'">FILMOTOKIO</title>
 
-    <!-- Bootstrap CSS framework -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
-    <!-- Custom CSS stylesheets -->
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/film.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
 
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
 
 <body>
 
-<!-- Include the navigation bar fragment -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Main film page content -->
 <div class="container-film">
 
-    <!-- Success and error message displays -->
     <div th:if="${successMessage}" class="alert alert-success enhanced-alert" th:text="${successMessage}">
         <i class="fas fa-check-circle alert-icon"></i>
         <span th:text="${successMessage}"></span>
@@ -40,12 +32,9 @@
         <span th:text="${errorMessage}"></span>
     </div>
 
-    <!-- Film details section -->
     <div class="d-flex mb-4 position-relative film-details-container">
-        <!-- Film poster image -->
         <div class="poster-container">
             <img th:src="${film.poster != null ? film.poster : '/images/default-poster.svg'}" alt="Poster" class="poster">
-            <!-- Poster overlay with hover effect -->
             <div class="poster-overlay">
                 <div class="overlay-content">
                     <i class="fas fa-play-circle overlay-icon"></i>
@@ -54,13 +43,11 @@
             </div>
         </div>
 
-        <!-- Enhanced average rating display overlaid on poster -->
         <div class="film-average enhanced-rating">
             <div class="rating-label">
                 <i class="fas fa-star rating-label-icon"></i>
                 <span>Rating</span>
             </div>
-            <!-- Generate 5 stars with appropriate classes based on average rating -->
             <div class="stars-container">
                 <span th:each="i : ${#numbers.sequence(1,5)}"
                       th:classappend="${T(filmotokio.util.StarRatingUtil).getStarClass(averageScore, i)}"
@@ -68,21 +55,17 @@
                     &#9733;
                 </span>
             </div>
-            <!-- Display numeric average rating -->
             <div class="rating-value">
                 <span class="avg-number" th:text="${#numbers.formatDecimal(averageScore,1,1)}">0</span>
             </div>
         </div>
 
-        <!-- Film information -->
         <div class="film-info-container">
-            <!-- Film title -->
             <div class="film-title-section">
                 <i class="fas fa-film title-icon"></i>
                 <h2 th:text="${film.title}"></h2>
             </div>
-            
-            <!-- Film basic details -->
+
             <div class="film-meta">
                 <div class="meta-item">
                     <i class="fas fa-calendar meta-icon"></i>
@@ -97,8 +80,7 @@
                     <span class="meta-unit">min</span>
                 </div>
             </div>
-            
-            <!-- Film synopsis -->
+
             <div class="synopsis-section">
                 <div class="section-header">
                     <i class="fas fa-align-left section-icon"></i>
@@ -107,14 +89,12 @@
                 <p th:text="${film.synopsis}" class="synopsis-text"></p>
             </div>
 
-            <!-- Film cast information -->
             <div class="cast-section">
                 <div class="section-header">
                     <i class="fas fa-users section-icon"></i>
                     <h5>Cast & Crew</h5>
                 </div>
 
-                <!-- Enhanced screenwriters section -->
                 <div class="cast-category">
                     <div class="category-header">
                         <i class="fas fa-pen category-icon"></i>
@@ -122,14 +102,12 @@
                     </div>
                     <div class="category-content">
                         <span th:if="${!film.screenwriters.isEmpty()}" class="cast-list">
-                            <!-- Loop through screenwriters and display names -->
                             <span th:each="person, stat : ${film.screenwriters}" class="cast-member">
                                 <i class="fas fa-user member-icon"></i>
                                 <span th:text="${person.name + ' ' + person.surname}"></span>
                                 <span th:if="${!stat.last}" class="separator">,</span>
                             </span>
                         </span>
-                        <!-- Show message if no screenwriters are listed -->
                         <div th:if="${film.screenwriters.isEmpty()}" class="empty-state">
                             <i class="fas fa-minus-circle empty-icon"></i>
                             Not specified
@@ -137,7 +115,6 @@
                     </div>
                 </div>
 
-                <!-- Enhanced actors section -->
                 <div class="cast-category">
                     <div class="category-header">
                         <i class="fas fa-theater-masks category-icon"></i>
@@ -145,14 +122,12 @@
                     </div>
                     <div class="category-content">
                         <span th:if="${!film.actors.isEmpty()}" class="cast-list">
-                            <!-- Loop through actors and display names -->
                             <span th:each="person, stat : ${film.actors}" class="cast-member">
                                 <i class="fas fa-user member-icon"></i>
                                 <span th:text="${person.name + ' ' + person.surname}"></span>
                                 <span th:if="${!stat.last}" class="separator">,</span>
                             </span>
                         </span>
-                        <!-- Show message if no actors are listed -->
                         <div th:if="${film.actors.isEmpty()}" class="empty-state">
                             <i class="fas fa-minus-circle empty-icon"></i>
                             Not specified
@@ -160,7 +135,6 @@
                     </div>
                 </div>
 
-                <!-- Enhanced musicians section -->
                 <div class="cast-category">
                     <div class="category-header">
                         <i class="fas fa-music category-icon"></i>
@@ -168,14 +142,12 @@
                     </div>
                     <div class="category-content">
                         <span th:if="${!film.musicians.isEmpty()}" class="cast-list">
-                            <!-- Loop through musicians and display names -->
                             <span th:each="person, stat : ${film.musicians}" class="cast-member">
                                 <i class="fas fa-user member-icon"></i>
                                 <span th:text="${person.name + ' ' + person.surname}"></span>
                                 <span th:if="${!stat.last}" class="separator">,</span>
                             </span>
                         </span>
-                        <!-- Show message if no musicians are listed -->
                         <div th:if="${film.musicians.isEmpty()}" class="empty-state">
                             <i class="fas fa-minus-circle empty-icon"></i>
                             Not specified
@@ -183,7 +155,6 @@
                     </div>
                 </div>
 
-                <!-- Enhanced directors -->
                 <div class="cast-category">
                     <div class="category-header">
                         <i class="fas fa-video category-icon"></i>
@@ -204,7 +175,6 @@
                     </div>
                 </div>
 
-                <!-- Enhanced photographers -->
                 <div class="cast-category">
                     <div class="category-header">
                         <i class="fas fa-camera category-icon"></i>
@@ -229,15 +199,12 @@
         </div>
     </div>
 
-    <!-- Enhanced Film Rating Section -->
     <div class="rating-section enhanced-section">
         <div class="section-header">
             <i class="fas fa-star section-icon"></i>
             <h5>Rate this film:</h5>
         </div>
         <form th:action="@{/films/{id}/score(id=${film.id})}" method="post" class="star-rating enhanced-star-rating">
-            <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
             <div class="star-input-group">
                 <input type="radio" name="value" id="star5" value="5" th:checked="${userScore == 5}" class="star-radio">
                 <label for="star5" class="star-label">
@@ -267,7 +234,6 @@
         </form>
     </div>
 
-    <!-- Enhanced Delete Button (Admin) -->
     <div class="delete-section enhanced-section" sec:authorize="hasRole('ADMIN')">
         <div class="section-header">
             <i class="fas fa-trash section-icon danger-icon"></i>
@@ -275,7 +241,6 @@
         </div>
         <form th:action="@{/films/delete/{id}(id=${film.id})}" method="post"
               onsubmit="return confirm('Are you sure you want to delete this film? This action is irreversible.');" class="delete-form">
-            <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="btn-action btn-delete">
                 <i class="fas fa-trash btn-icon"></i>
                 <span>Delete Film</span>
@@ -283,7 +248,6 @@
         </form>
     </div>
 
-    <!-- Enhanced Review Form -->
     <div th:if="${!userHasReviewed}" class="review-form-section enhanced-section">
         <div class="section-header">
             <i class="fas fa-comment-dots section-icon"></i>
@@ -291,7 +255,6 @@
         </div>
         <form th:action="@{/films/{id}/review(id=${film.id})}" method="post"
               onsubmit="this.querySelector('button[type=submit]').disabled = true;" class="review-form enhanced-form">
-            <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="form-group enhanced-input-group">
                 <label class="form-label enhanced-label">
                     <i class="fas fa-heading label-icon"></i>
@@ -313,7 +276,6 @@
         </form>
     </div>
 
-    <!-- Enhanced Reviews Section -->
     <div class="reviews-section enhanced-section">
         <div class="section-header">
             <i class="fas fa-comments section-icon"></i>
@@ -323,8 +285,8 @@
             <div class="review-header">
                 <div class="reviewer-info">
                     <div class="reviewer-avatar">
-                        <img th:src="${review.user.image != null ? review.user.image : '/images/default-avatar.svg'}" 
-                             th:alt="${review.user.name + ' ' + review.user.surname}" 
+                        <img th:src="${review.user.image != null ? review.user.image : '/images/default-avatar.svg'}"
+                             th:alt="${review.user.name + ' ' + review.user.surname}"
                              class="avatar-img"
                              onerror="this.src='/images/default-avatar.svg'">
                     </div>
@@ -346,10 +308,8 @@
 
 </div>
 
-<!-- Footer -->
 <div th:replace="~{fragments/footer :: siteFooter}"></div>
 
-<!-- Enhanced Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.querySelectorAll('.star-rating input').forEach(input => {
